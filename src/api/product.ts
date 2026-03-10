@@ -46,4 +46,7 @@ export const getProductByCategory=(categoryId:number):Promise<{data:Product[]}> 
     return request.get(`/products/category/${categoryId}`)
 }
 
-
+//根据商品id获得详情
+export const getProductById=(id:number):Promise<{data:Product}>=>{
+    return request.get(`products/${id}`)
+}

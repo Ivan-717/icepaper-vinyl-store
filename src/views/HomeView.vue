@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref,onMounted } from 'vue';
 import { getCategories,getProductByCategory,type Category,type Product } from '@/api/product';
-import { ca } from 'element-plus/lib/locale/index.js';
+import { useRouter } from 'vue-router';
 
 //Category[]是ref的数据类型
 //([])初始化空数组
@@ -12,6 +12,8 @@ const products=ref<Product[]>([])
 const activeCategory=ref<number>(1)
 //是否正在加载数据
 const loading=ref(false)
+
+const router=useRouter()
 
 //加载分类
 onMounted(async() => {
@@ -66,7 +68,8 @@ const changeCategory=(categoryId:number)=>{
         </div>
         <!-- 商品列表区域 -->
         <div v-else class="products">
-            <div v-for="product in products" :key="product.id" class="product-card">
+            <div v-for="product in products" :key="product.id" class="product-card"
+            @click="router.push(`/product/${product.id}`)">
                 <img 
                     :src="product.image"
                     :alt="product.name"
