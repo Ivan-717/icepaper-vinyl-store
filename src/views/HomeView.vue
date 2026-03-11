@@ -69,7 +69,7 @@ const changeCategory=(categoryId:number)=>{
         <!-- 商品列表区域 -->
         <div v-else class="products">
             <div v-for="product in products" :key="product.id" class="product-card"
-            @click="router.push(`/product/${product.id}`)">
+            @click="router.push(`/products/${product.id}`)">
                 <img 
                     :src="product.image"
                     :alt="product.name"

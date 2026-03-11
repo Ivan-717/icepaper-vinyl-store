@@ -11,7 +11,8 @@ const router = createRouter({
       component:HomeView //显示HomeView组件
     },
     {
-      path:'/product/:id',
+      //:id是一个占位符，任何/product/:xxx路径，都配这个路由，并把xxx自动存在params.id里
+      path:'/products/:id',
       name:'product-detail',
       component:ProduceDetail
     }
