@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref,onMounted } from 'vue';
+import { ref,onMounted, computed } from 'vue';
 import { getCategories,getProductByCategory,type Category,type Product } from '@/api/product';
 import { useRouter } from 'vue-router';
 
@@ -14,6 +14,11 @@ const activeCategory=ref<number>(1)
 const loading=ref(false)
 
 const router=useRouter()
+
+//搜索相关
+const searchKeyword=ref('')
+
+
 
 //加载分类
 onMounted(async() => {
@@ -48,11 +53,28 @@ const changeCategory=(categoryId:number)=>{
     activeCategory.value=categoryId
     loadProducts(categoryId)
 }
+
+//跳转到搜索页
+const goToSearch=()=>{
+  if(searchKeyword.value.trim()){
+    //encodeURIComponent把特殊字符转换成浏览器认识的编码，避免出错
+    router.push(`/search?q=${encodeURIComponent(searchKeyword.value.trim())}`)
+  }
+}
 </script>
 
 <template>
     <div class="home">
         <h2>欢迎来冰，逛逛店子</h2>
+        <div class="home-search">
+          <input type="text"
+            v-model="searchKeyword"
+            placeholder="搜索专辑或艺术家..."
+            @keyup.enter="goToSearch"
+            class="home-search-input">
+            <button @click="goToSearch" class="home-search-btn">搜索</button>
+        </div>
+
         <div class="categories">
             <button v-for="cat in categories" 
                 :key="cat.id" 
@@ -186,4 +208,41 @@ const changeCategory=(categoryId:number)=>{
   margin: 0.5rem 0 0;
 }
 
+/* 首页搜索框 */
+.home-search {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+.home-search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.home-search-input:focus {
+  outline: none;
+  border-color: #42b983;
+  box-shadow: 0 0 0 3px rgba(66, 185, 131, 0.1);
+}
+
+.home-search-btn {
+  padding: 0.75rem 1.5rem;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.home-search-btn:hover {
+  background: #3aa876;
+}
 </style>

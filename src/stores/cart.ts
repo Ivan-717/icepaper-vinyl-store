@@ -63,7 +63,7 @@ export const useCartStore=defineStore('cart',()=>{
 
     //移除商品
     const removeItem=(productId:number)=>{
-        //findIndex：返回第一个满足元素的索引个，无返回-1
+        //findIndex：返回第一个满足元素的索引，无返回-1
         const index=items.value.findIndex(item=>item.id===productId)
         if(index>-1){
             //splice:第一个是起始索引，第二个是删除个数
@@ -98,7 +98,8 @@ export const useCartStore=defineStore('cart',()=>{
         totalCount,
         addItem,
         removeItem,
-        updateQuantity
+        updateQuantity,
+        clearCart
     }
 
 })

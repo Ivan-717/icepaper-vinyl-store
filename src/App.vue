@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import { RouterLink,RouterView } from 'vue-router';
+  import { useCartStore } from './stores/cart';
+
+  const cartStore=useCartStore()
 </script>
 
 <template>
@@ -8,6 +11,12 @@
       <h1>🎵 冰纸专辑店</h1>
       <nav>
         <RouterLink to="/">首页</RouterLink>
+        <RouterLink to="/cart">
+          🛒 购物车
+          <span v-if="cartStore.totalCount>0" class="cart-badge">
+            {{ cartStore.totalCount }}
+          </span>
+        </RouterLink>
       </nav>
     </header>
     <main>
@@ -64,6 +73,28 @@ main {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+}
+
+/* 购物车链接特殊处理 */
+.cart-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 购物车角标 */
+.cart-badge {
+  display: inline-block;
+  min-width: 20px;
+  height: 20px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  padding: 0 4px;
+  margin-left: 4px;
 }
 
 </style>

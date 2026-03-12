@@ -116,11 +116,15 @@ const goBack=()=>{
                         :disabled="quantity>=product.stock">
                             +
                         </button>
-                    </div>
+                      </div>
+
+                      <button class="add-to-cart-btn" @click="addToCart">
+                          加入购物车
+                      </button>
                 </div>
             </div>
-          
         </div>
+        
         <!-- 商品不存在 -->
         <div v-else class="not-found">
            商品不存在
