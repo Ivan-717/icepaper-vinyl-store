@@ -12,6 +12,10 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml  #告诉mybatis我的sql语句所在的文件
   type-aliases-package: com.bingzhi.vinyl.entity #写sql时，不用写完整的类名
+  configuration:
+    map-underscore-to-camel-case: true  #下划线拼接自动转为驼峰
+
 
 server:
   port: 8080
+
