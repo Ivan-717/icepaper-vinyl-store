@@ -1,3 +1,6 @@
+import AdminLayout from '@/views/admin/AdminLayout.vue'
+import AdminLogin from '@/views/admin/AdminLogin.vue'
+import Dashboard from '@/views/admin/Dashboard.vue'
 import CartView from '@/views/CartView.vue'
 import HomeView from '@/views/HomeView.vue'
 import ProduceDetail from '@/views/ProduceDetail.vue'
@@ -25,6 +28,25 @@ const router = createRouter({
       path:'/search',
       name:'search',
       component:SearchView
+    },{
+      path:'/admin/login',  //管理员登录页
+      name:'admin-login',
+      component:AdminLogin
+    },{
+      path:'/admin',
+      component:AdminLayout,
+      children:[
+        {
+          path:"dashboard",
+          name:"admin-dashboard",
+          component:Dashboard
+        },{
+          path:'shop',
+          name:'admin-shop',
+          //不常用的页面：懒加载(用的时候才加载)
+          component:()=>import('../views/admin/ShopStatus.vue')
+        }
+      ]
     }
   ],
 })

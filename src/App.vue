@@ -1,13 +1,22 @@
 <script setup lang="ts">
   import { RouterLink,RouterView } from 'vue-router';
   import { useCartStore } from './stores/cart';
+  import { useRoute } from 'vue-router';
+  import { computed } from 'vue';
+
 
   const cartStore=useCartStore()
+  const route=useRoute()
+
+  //判断当前是不是管理后台
+  const isAdminRoute=computed(()=>{
+    return route.path.startsWith('/admin')
+  })
 </script>
 
 <template>
   <div id="app">
-    <header>
+    <header v-if="!isAdminRoute">
       <h1>🎵 冰纸专辑店</h1>
       <nav>
         <RouterLink to="/">首页</RouterLink>
