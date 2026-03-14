@@ -4,7 +4,7 @@ spring:
     name: IcePaper Vinyl Store
 
   datasource:
-    url: jdbc:mysql://localhost:3306/bingzhi_vinyl?serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://localhost:3306/bingzhi_vinyl?serverTimezone=Asia/Shanghai&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: Lzb20060908
     driver-class-name: com.mysql.cj.jdbc.Driver  #mysql8.0的官方驱动类
