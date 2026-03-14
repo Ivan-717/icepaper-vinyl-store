@@ -39,12 +39,16 @@ const router = createRouter({
         {
           path:"dashboard",
           name:"admin-dashboard",
-          component:Dashboard
+          component: () => import('../views/admin/Dashboard.vue')
         },{
           path:'shop',
           name:'admin-shop',
           //不常用的页面：懒加载(用的时候才加载)
           component:()=>import('../views/admin/ShopStatus.vue')
+        },{
+          path:'employee',
+          name:'admin-employee',
+          component:()=>import('../views/admin/Employee.vue')
         }
       ]
     }
