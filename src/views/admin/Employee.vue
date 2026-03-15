@@ -7,8 +7,7 @@ import{
     deleteEmployee,
     type Employee 
 } from '../../api/employee'
-import { fa } from 'element-plus/lib/locale/index.js';
-import { idText } from 'typescript';
+import EmployeeForm from './EmployeeForm.vue';
 
 //员工列表数据
 const employeeList=ref<Employee[]>([])
@@ -70,6 +69,27 @@ const handleDelete=async(id:number)=>{
     }
 }
 
+//弹窗组件引用
+//InstanceType<typeof User>:获取user的实例类型
+//实例类型：里面的数据，方法，调用时不会报错
+const formRef=ref<InstanceType<typeof EmployeeForm>|null>(null)
+
+//打开新增弹窗
+const openAdd=()=>{
+  //?. 有值就执行，没有就跳过
+  formRef.value?.openAdd()
+}
+
+//打开编辑弹窗
+const openEdit=(emp:Employee)=>{
+  formRef.value?.openEdit(emp)
+}
+
+//刷新列表
+const refreshList=()=>{
+  loadList()
+}
+
 onMounted(()=>{
     loadList()
 })
@@ -79,7 +99,7 @@ onMounted(()=>{
     <div class="employee">
         <div class="header">
             <h1>👥 员工管理</h1>
-            <button class="add-btn">+新增员工</button>
+            <button class="add-btn" @click="openAdd">+新增员工</button>
         </div>
 
         <div v-if="loading" class="loading">
@@ -124,7 +144,7 @@ onMounted(()=>{
                             {{ emp.createTime?.slice(0,10) }}
                         </td>
                         <td class="actions">
-                            <button class="action-btn edit">编辑</button>
+                            <button class="action-btn edit" @click="openEdit(emp)">编辑</button>
                             <button class="action-btn reset" @click="handleResetPassword(emp.id!)">
                                 重置密码
                             </button>
@@ -136,6 +156,10 @@ onMounted(()=>{
                 </tbody>
             </table>
         </div>
+        <!-- 员工表格弹窗 -->
+        <!-- emit通信：传递success  -->
+        <!-- ref="formRef":有才能调用子类的方法 -->
+        <EmployeeForm ref="formRef" @success="refreshList"/> 
     </div>
 </template>
 
