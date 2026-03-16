@@ -17,7 +17,7 @@ public interface EmployeeMapper {
     Employee findById(@Param("id") Long id);
 
     //根据用户名查询员工
-    @Select("SELECT * FROM employee WHERE usrname=#(username)")
+    @Select("SELECT * FROM employee WHERE username=#{username}")
     Employee findByUsername(@Param("username") String username);
 
 

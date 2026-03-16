@@ -2,6 +2,7 @@ package com.bingzhi.vinyl.controller;
 
 import com.bingzhi.vinyl.entity.Employee;
 import com.bingzhi.vinyl.mapper.EmployeeMapper;
+import com.bingzhi.vinyl.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,13 +97,44 @@ public class EmployeeController {
         return result;
     }
 
+    //登录方法
+    @PostMapping("/login")
+    public Map<String,Object> login(@RequestBody Map<String,String> request){
+        String username=request.get("username");
+        String password=request.get("password");
 
+        Employee employee=employeeMapper.findByUsername(username);
 
+        if(employee==null){
+            throw new RuntimeException("用户名或密码错误");
+        }
 
+        if(!password.equals(employee.getPassword())){
+            throw new RuntimeException("用户名或密码错误");
+        }
 
+        //验证账号状态
+        if (employee.getStatus()==0){
+            throw new RuntimeException("账号已被禁用");
+        }
 
+        //验证通过，生成JWT token
+        String token= JwtUtil.generateToken(
+                employee.getId(),
+                employee.getUsername(),
+                employee.getRole()
+        );
 
+        //返回结果
+        Map<String,Object> result=new HashMap<>();
+        result.put("token",token);
+        result.put("userId",employee.getId());
+        result.put("username", employee.getUsername());
+        result.put("name", employee.getName());
+        result.put("role", employee.getRole());
 
+        return result;
+    }
 
 
 }
