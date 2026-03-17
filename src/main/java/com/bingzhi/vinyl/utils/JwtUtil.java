@@ -69,9 +69,7 @@ public class JwtUtil {
     //验证token是否有效
     public static boolean validateToken(String token){
         try{
-            Claims claims=parseToken(token); //能解析就有效
-            System.out.println("验证成功，用户: " + claims.get("username"));
-            System.out.println("过期时间: " + claims.getExpiration());
+            parseToken(token); //能解析就有效
             return true;
         }catch (Exception e){
             //解析失败

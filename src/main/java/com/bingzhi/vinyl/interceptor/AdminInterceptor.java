@@ -13,6 +13,13 @@ public class AdminInterceptor implements HandlerInterceptor {
     //return true放行 false拦截
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object handler) throws Exception{
+
+        //放行OPTIONS请求（预检请求）
+        if (request.getMethod().equals("OPTIONS")){
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
         //获取请求的URI
         String uri=request.getRequestURI();
 
@@ -23,8 +30,6 @@ public class AdminInterceptor implements HandlerInterceptor {
 
         //从请求体获取token
         String token=request.getHeader("Authorization");
-        System.out.println("收到的token: " + token);
-
         //验证token
         if (token==null || !JwtUtil.validateToken(token)){
             //设置1响应状态码为401(未授权)
