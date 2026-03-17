@@ -28,19 +28,25 @@ const handleLogin=async()=>{
 
     try{
         //调用后端接口
+        const res=await axios.post('http://localhost:8080/api/admin/employee/login',
+          {
+            username:loginForm.value.username,
+            password:loginForm.value.password
+          }
+        )
 
-        //模拟登陆成功
-        if(loginForm.value.username==='admin' && loginForm.value.password==='123456'){
-            //存储登录状态
-            localStorage.setItem('adminToken','fake-token')
-            router.push('/admin/dashboard')
+        //登陆成功，保存token和用户信息
+        const {token,userId,username,name,role}=res.data
+        //存到localStorage
+        localStorage.setItem('adminToken',token)
+        localStorage.setItem('adminUser',JSON.stringify({userId,username,name,role}))
 
-        }else{
-            errorMsg.value='用户名或密码错误'
-        }
-    }catch(error){
-        errorMsg.value='登录失败，请稍后重试'
+        //跳转到管理后台首页
+        router.push('/admin/dashboard')
+    }catch(error:any){
         console.error('登录错误:',error)
+        //response:异步请求
+        errorMsg.value=error.response?.data?.message||'登录失败，请稍后重试'
     }finally{
         loading.value=false
     }

@@ -49,10 +49,39 @@ const router = createRouter({
           path:'employee',
           name:'admin-employee',
           component:()=>import('../views/admin/Employee.vue')
+        },{
+          path:'product',
+          name:'admin-product',
+          component:()=>import('../views/admin/Product.vue')
         }
       ]
     }
   ],
+})
+
+//路由守卫：每次页面跳转（路由切换前），都会先执行这个函数里的逻辑
+/*
+  to:要跳转的目标界面
+  form:从哪个页面跳过来的
+  next:允许跳转
+*/
+router.beforeEach((to,from,next)=>{
+  //如果登录页，直接放行
+  if(to.path==='/admin/login'){
+    next()
+    return
+  }
+
+  //如果是管理后台的路由,检查token
+  if(to.path.startsWith('/admin')){
+    const token=localStorage.getItem('adminToken')
+    if(!token){
+      next('/admin/login')
+      return
+    }
+  }
+
+  next()
 })
 
 export default router

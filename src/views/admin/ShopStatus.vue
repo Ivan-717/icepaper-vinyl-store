@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import request from '@/api/request';
 
 //当前状态:1营业 0打烊
 const status=ref(1)
@@ -9,7 +9,7 @@ const loading=ref(false)
 //获取当前状态
 const fetchStatus=async()=>{
     try{
-        const res=await axios.get('http://localhost:8080/api/admin/shop/status')
+        const res=await request.get('http://localhost:8080/api/admin/shop/status')
         status.value=res.data.status
     }catch(error){
         console.error('获取状态失败：',error)
@@ -22,7 +22,7 @@ const toggleStatus=async()=>{
     try{
         const newStatus=status.value===1?0:1
         //{ status: newStatus }是请求体，是发给后端的数据
-        await axios.put('http://localhost:8080/api/admin/shop/status',{
+        await request.put('http://localhost:8080/api/admin/shop/status',{
             status:newStatus
         })
 
