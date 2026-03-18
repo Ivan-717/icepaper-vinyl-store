@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref,onMounted } from 'vue';
 import request from '@/api/request';
+import ProductForm
+ from './ProductForm.vue';
+import type { Category } from '@/api/product';
 
 //商品数据类型
 interface Product{
@@ -65,7 +68,41 @@ const handleDelete=async(id:number)=>{
 
 onMounted(()=>{
     loadList()
+    loadCategories()
 })
+
+const formRef=ref<InstanceType<typeof ProductForm>|null>(null)
+
+const openAdd=()=>{
+  formRef.value?.openAdd()
+}
+
+const openEdit=(item:Product)=>{
+  formRef.value?.openEdit(item)
+}
+
+const refreshList=()=>{
+  loadList()
+}
+
+//分类列表
+const categories=ref<Category[]>([])
+
+//加载分类
+const loadCategories=async()=>{
+  try{
+    const res=await request.get('/categories')
+    categories.value=res.data
+  }catch(error){
+    console.log('加载分类失败：',error)
+  }
+}
+
+//根据id获取分类
+const getCategoryName=(categoryId:number)=>{
+  const cat=categories.value.find(c=>c.id===categoryId)
+  return cat ? cat.name : '未知'
+}
     
 </script>
 
@@ -73,7 +110,7 @@ onMounted(()=>{
     <div class="product">
         <div class="header">
             <h1>💿 商品管理</h1>
-            <button class="add-btn">+新增商品</button>
+            <button class="add-btn" @click="openAdd">+新增商品</button>
         </div>
 
         <div v-if="loading" class="loading">
@@ -105,7 +142,7 @@ onMounted(()=>{
                         <td>{{ item.artist }}</td>
                         <td>¥{{ item.price }}</td>
                         <td>{{ item.stock }}</td>
-                        <td>{{ item.categoryId }}</td>
+                        <td>{{ getCategoryName(item.categoryId) }}</td>
                         <td>
                             <button class="status-btn" 
                                 :class="{'status-active':item.status===1,'status-inactive':item.status===0}"
@@ -115,13 +152,16 @@ onMounted(()=>{
                         </td>
 
                         <td class="actions">
-                            <button class="action-btn edit">编辑</button>
+                            <button class="action-btn edit" @click="openEdit(item)">编辑</button>
                             <button class="action-btn delete" @click="handleDelete(item.id)">删除</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <!-- 弹窗 -->
+        <ProductForm ref="formRef" @success="refreshList"/> 
     </div>
 </template>
 
