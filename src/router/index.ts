@@ -53,6 +53,14 @@ const router = createRouter({
           path:'product',
           name:'admin-product',
           component:()=>import('../views/admin/Product.vue')
+        },{
+          path:"combo",
+          name:'admin-combo',
+          component:()=>import('../views/admin/Combo.vue')
+        },{
+          path:'statistics',
+          name:'admin-statistics',
+          component:()=>import('../views/admin/Statistics.vue')
         }
       ]
     }
