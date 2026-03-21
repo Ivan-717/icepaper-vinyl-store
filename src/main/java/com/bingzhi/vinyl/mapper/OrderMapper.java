@@ -1,0 +1,33 @@
+package com.bingzhi.vinyl.mapper;
+
+import com.bingzhi.vinyl.entity.Orders;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Mapper
+public interface OrderMapper {
+    //查询所有订单
+    @Select("SELECT * from orders ORDER BY id ASC ")
+    List<Orders> findAll();
+
+    //根据状态查询订单
+    @Select("SELECT * FROM orders WHERE status=#{status} order by id ASC")
+    List<Orders> findByStatus(@Param("status") Integer status);
+
+    //根据id查询订单
+    @Select("SELECT * from orders WHERE id=#{id}")
+    Orders findById(@Param("id") Long id);
+
+    //查询今日订单(按时间范围）
+    @Select("SELECT * FROM orders WHERE create_time BETWEEN #{start} and #{end}")
+    List<Orders> findByCreateTimeBetween(@Param("start")LocalDateTime start,@Param("end") LocalDateTime end);
+
+    //更新订单状态
+    @Update("UPDATE orders SET status = #{status},update_time=NOW() Where id=#{id}")
+    void updateStatus(@Param("id") Long id,@Param("status") Integer status);
+}

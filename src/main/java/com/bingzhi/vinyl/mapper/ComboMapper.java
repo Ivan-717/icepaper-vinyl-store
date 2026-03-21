@@ -5,7 +5,7 @@ import com.bingzhi.vinyl.entity.ComboItem;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-
+@Mapper
 public interface ComboMapper {
     @Select("SELECT * from combo ORDER BY id ASC ")
     List<Combo> findAll();
