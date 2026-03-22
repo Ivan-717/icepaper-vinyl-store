@@ -61,6 +61,10 @@ const router = createRouter({
           path:'statistics',
           name:'admin-statistics',
           component:()=>import('../views/admin/Statistics.vue')
+        },{
+          path:'order',
+          name:'admin-order',
+          component:()=>import("../views/admin/Order.vue")
         }
       ]
     }

@@ -9,6 +9,10 @@ import{
 } from '../../api/employee'
 import EmployeeForm from './EmployeeForm.vue';
 
+//获取当前登录用户
+const currentUser=JSON.parse(localStorage.getItem('adminUser')||'{}')
+const isAdmin=currentUser.role==='admin'
+
 //员工列表数据
 const employeeList=ref<Employee[]>([])
 const loading=ref(false)
@@ -99,7 +103,7 @@ onMounted(()=>{
     <div class="employee">
         <div class="header">
             <h1>👥 员工管理</h1>
-            <button class="add-btn" @click="openAdd">+新增员工</button>
+            <button v-if="isAdmin" class="add-btn" @click="openAdd">+新增员工</button>
         </div>
 
         <div v-if="loading" class="loading">
@@ -134,7 +138,7 @@ onMounted(()=>{
                             </span>
                         </td>
                         <td>
-                            <button class="status-btn"
+                            <button v-if="isAdmin" class="status-btn"
                                 :class="{'status-active':emp.status===1,'status=inactive':emp.status===0}"
                                 @click="toggleStatus(emp.id!,emp.status)">
                                 {{ emp.status===1? '启用' : '禁用'}}
@@ -143,7 +147,7 @@ onMounted(()=>{
                         <td>
                             {{ emp.createTime?.slice(0,10) }}
                         </td>
-                        <td class="actions">
+                        <td class="actions" v-if="isAdmin">
                             <button class="action-btn edit" @click="openEdit(emp)">编辑</button>
                             <button class="action-btn reset" @click="handleResetPassword(emp.id!)">
                                 重置密码
