@@ -40,6 +40,23 @@ public class AdminInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        //权限验证
+        String role=JwtUtil.getRole(token);
+
+        //员工管理接口：只有管理员可以操作
+        if(uri.contains("/admin/employee")){
+            //检查是否为get请求
+            if(request.getMethod().equals("GET")){
+                return true;
+            }
+            if(!"admin".equals(role)){
+                response.setStatus(403);
+                response.getWriter().write("{\"error\":\"权限不足，只有管理员可以操作\"}");
+
+                return false;
+            }
+        }
+
         return true;
     }
 }
