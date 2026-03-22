@@ -28,7 +28,7 @@ const handleLogin=async()=>{
 
     try{
         //调用后端接口
-        const res=await axios.post('http://localhost:8080/api/admin/employee/login',
+        const res=await axios.post('/api/admin/employee/login',
           {
             username:loginForm.value.username,
             password:loginForm.value.password

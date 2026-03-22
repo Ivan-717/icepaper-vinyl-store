@@ -13,7 +13,7 @@ export interface Employee{
 }
 
 //基础url
-const BASE_URL='http://localhost:8080/api/admin/employee'
+const BASE_URL='/admin/employee'
 
 //获取员工列表
 export const getEmployeeList=()=>{

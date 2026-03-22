@@ -9,7 +9,7 @@ const loading=ref(false)
 //获取当前状态
 const fetchStatus=async()=>{
     try{
-        const res=await request.get('http://localhost:8080/api/admin/shop/status')
+        const res=await request.get('/admin/shop/status')
         status.value=res.data.status
     }catch(error){
         console.error('获取状态失败：',error)
@@ -22,7 +22,7 @@ const toggleStatus=async()=>{
     try{
         const newStatus=status.value===1?0:1
         //{ status: newStatus }是请求体，是发给后端的数据
-        await request.put('http://localhost:8080/api/admin/shop/status',{
+        await request.put('/admin/shop/status',{
             status:newStatus
         })
 
