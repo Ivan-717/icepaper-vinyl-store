@@ -3,8 +3,6 @@ import axios from "axios";
 const baseURL = import.meta.env.DEV 
   ? 'http://localhost:8080/api' 
   : '/api'   // 改成相对路径
-// console.log('当前环境:', import.meta.env.DEV ? '开发' : '生产')
-// console.log('baseURL:', baseURL)
 
 //私人定制版request
 //创建axios实例

@@ -1,10 +1,10 @@
 import AdminLayout from '@/views/admin/AdminLayout.vue'
 import AdminLogin from '@/views/admin/AdminLogin.vue'
 import Dashboard from '@/views/admin/Dashboard.vue'
-import CartView from '@/views/CartView.vue'
-import HomeView from '@/views/HomeView.vue'
-import ProduceDetail from '@/views/ProduceDetail.vue'
-import SearchView from '@/views/SearchView.vue'
+import CartView from '@/views/user/CartView.vue'
+import HomeView from '@/views/user/HomeView.vue'
+import ProduceDetail from '@/views/user/ProduceDetail.vue'
+import SearchView from '@/views/user/SearchView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -28,6 +28,14 @@ const router = createRouter({
       path:'/search',
       name:'search',
       component:SearchView
+    },{
+      path:'/login',
+      name:'login',
+      component:()=>import('../views/Login.vue')
+    },{
+      path:'/register',
+      name:'register',
+      component:()=>import('../views/Register.vue')
     },{
       path:'/admin/login',  //管理员登录页
       name:'admin-login',

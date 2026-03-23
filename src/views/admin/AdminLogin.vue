@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import request from '@/api/request';
 
 const router=useRouter()
 
@@ -28,7 +28,7 @@ const handleLogin=async()=>{
 
     try{
         //调用后端接口
-        const res=await axios.post('/api/admin/employee/login',
+        const res=await request.post('/admin/employee/login',
           {
             username:loginForm.value.username,
             password:loginForm.value.password
