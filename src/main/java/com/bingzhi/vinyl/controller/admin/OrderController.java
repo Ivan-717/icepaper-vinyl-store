@@ -1,4 +1,4 @@
-package com.bingzhi.vinyl.controller;
+package com.bingzhi.vinyl.controller.admin;
 
 import com.bingzhi.vinyl.entity.OrderDetail;
 import com.bingzhi.vinyl.entity.Orders;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@RestController
+@RestController("adminOrderController")
 @RequestMapping("/api/admin/orders")
 public class OrderController {
 

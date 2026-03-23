@@ -1,4 +1,4 @@
-package com.bingzhi.vinyl.controller;
+package com.bingzhi.vinyl.controller.admin;
 
 import com.bingzhi.vinyl.entity.Combo;
 import com.bingzhi.vinyl.entity.ComboItem;

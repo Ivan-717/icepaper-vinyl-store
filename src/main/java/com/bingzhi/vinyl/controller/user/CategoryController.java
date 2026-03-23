@@ -1,4 +1,4 @@
-package com.bingzhi.vinyl.controller;
+package com.bingzhi.vinyl.controller.user;
 
 import com.bingzhi.vinyl.entity.Category;
 import com.bingzhi.vinyl.mapper.CategoryMapper;

@@ -1,4 +1,4 @@
-package com.bingzhi.vinyl.controller;
+package com.bingzhi.vinyl.controller.admin;
 
 import com.bingzhi.vinyl.entity.Employee;
 import com.bingzhi.vinyl.mapper.EmployeeMapper;
