@@ -65,7 +65,6 @@ const goToSearch=()=>{
 
 <template>
     <div class="home">
-        <h2>欢迎来冰，逛逛店子</h2>
         <div class="home-search">
           <input type="text"
             v-model="searchKeyword"
@@ -107,100 +106,116 @@ const goToSearch=()=>{
     </div>
 </template>
 
-<style scoped>
 
+<style scoped>
 .home {
   text-align: center;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
 }
 
 /* 分类按钮容器 */
 .categories {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   display: flex;
-  gap: 1rem;          /* 按钮之间的间距 */
+  gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;    /* 手机端自动换行 */
+  flex-wrap: wrap;
 }
 
-/* 普通按钮样式 */
 .categories button {
   padding: 0.5rem 1.5rem;
   border: 1px solid #42b983;
   background: white;
-  border-radius: 20px;  /* 圆角 */
-  cursor: pointer;      /* 鼠标变小手 */
+  border-radius: 20px;
+  cursor: pointer;
   font-size: 1rem;
-  transition: all 0.3s; /* 动画过渡 */
+  transition: all 0.3s;
 }
 
-/* 鼠标悬停效果 */
 .categories button:hover {
   background: #42b983;
   color: white;
 }
 
-/* 选中状态（当前分类） */
 .categories button.active {
   background: #42b983;
   color: white;
   border-color: #42b983;
 }
 
-/* 加载状态文字 */
 .loading {
   padding: 2rem;
   color: #666;
 }
 
-/* 商品列表网格布局 */
+/* 商品列表网格布局 - 固定5列 */
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;           /* 卡片间距 */
-  margin-top: 2rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin-top: 1.5rem;
+  justify-content: start;
+  width: 100%;
 }
 
-/* 单个商品卡片 */
+/* 响应式 */
+@media (max-width: 1400px) {
+  .products {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 1100px) {
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .products {
+    grid-template-columns: 1fr;
+  }
+}
+
 .product-card {
   border: 1px solid #eee;
   border-radius: 8px;
   padding: 1rem;
-  text-align: left;    /* 文字左对齐 */
+  text-align: left;
   transition: all 0.3s;
   background: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* 卡片悬停效果 */
 .product-card:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-2px);  /* 向上浮动 */
+  transform: translateY(-2px);
 }
 
-/* 商品图片 */
 .product-card img {
   width: 100%;
   height: 200px;
-  object-fit: cover;   /* 图片裁剪适应，不变形 */
+  object-fit: cover;
   border-radius: 4px;
   margin-bottom: 0.5rem;
 }
 
-/* 专辑名称 */
 .product-card h3 {
   font-size: 1.1rem;
   margin: 0.5rem 0 0.25rem;
   color: #333;
 }
 
-/* 艺术家 */
 .product-card .artist {
   color: #666;
   font-size: 0.9rem;
   margin: 0.25rem 0;
 }
 
-/* 价格 */
 .product-card .price {
   color: #f56c6c;
   font-weight: bold;
@@ -213,7 +228,7 @@ const goToSearch=()=>{
   display: flex;
   gap: 0.5rem;
   max-width: 500px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.5rem;
 }
 
 .home-search-input {

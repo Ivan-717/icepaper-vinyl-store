@@ -2,9 +2,13 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { userLogin } from '@/api/user';
+import { useCartStore } from '@/stores/cart';
+
 const router=useRouter()
 const username=ref('')
 const password=ref('')
+
+const cartStore=useCartStore()
 
 const handleLogin=async()=>{
     try{
@@ -17,8 +21,19 @@ const handleLogin=async()=>{
         localStorage.setItem('userToken',res.data.token)
         localStorage.setItem('userInfo',JSON.stringify(res.data))
 
+
+        //给未登录的人用的
+        //获取本地购物车
+        const localCart=JSON.parse(localStorage.getItem('cart')||'[]')
+
+        if(localCart.length>0){
+          await cartStore.syncLocalCart(localCart)
+          localStorage.removeItem('cart')
+        }
+
         //跳转到首页
-        router.push('/')
+        //强行刷新界面
+        window.location.href=('/')
     }catch(error){
         console.error('登录失败:',error)
         alert('登录失败')
@@ -26,6 +41,14 @@ const handleLogin=async()=>{
 }
 const goToRegister=()=>{
     router.push('/register')
+}
+
+//游客进入
+const enterAsGuest=()=>{
+  //清除任何可能残留的token
+  localStorage.removeItem('userToken')
+  localStorage.removeItem('userInfo')
+  router.push('/')
 }
 
 </script>
@@ -45,6 +68,10 @@ const goToRegister=()=>{
                 </div>
                 <button type="submit" class="login-btn">登录</button>
             </form>
+
+            <div class="guest-entry">
+              <button @click="enterAsGuest" class="guest-btn">以游客身份进入</button>
+            </div>
 
             <p class="register-link">
                 还没有账号？<a @click="goToRegister">立即注册</a>
@@ -133,5 +160,25 @@ const goToRegister=()=>{
 
 .register-link a:hover {
   text-decoration: underline;
+}
+
+/* 游客区域 */
+.guest-entry {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.guest-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.guest-btn:hover {
+  color: #42b983;
 }
 </style>

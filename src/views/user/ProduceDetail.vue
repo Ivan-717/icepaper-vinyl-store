@@ -4,6 +4,7 @@ import { useRoute,useRouter } from 'vue-router';
 import axios from 'axios';
 import { useCartStore } from '@/stores/cart';
 import type { Product } from '@/api/product';
+import {nanoid} from 'nanoid'
 
 //获取当前路由对象，用于读取URL参数
 const route=useRoute()
@@ -36,19 +37,44 @@ onMounted(async()=>{
 })
 
 //加入购物车
-const addToCart=()=>{
-    if(product.value){
-        //调用购物车store的addItem方法
-        cartStore.addItem({
-            id:product.value.id,
-            name: product.value.name,          // 商品名称
-            artist: product.value.artist,      // 艺术家
-            price: product.value.price,        // 单价
-            image: product.value.image,        // 图片路径
-            quantity: quantity.value  
-        })
-        alert('已加入购物车')
+const addToCart=async()=>{
+  if(!product.value){
+    return
+  }
+
+  const token=localStorage.getItem('userToken')
+
+  if(!token){
+    //存localstorage
+    const cart=JSON.parse(localStorage.getItem('cart')||'[]')
+    const existing=cart.find((item:any)=>item.productId===product.value?.id)
+    if(existing){
+      existing.quantity+=quantity.value
+    }else{
+      cart.push({
+        id:nanoid(),  // 加临时 id
+        productId: product.value.id,
+        quantity: quantity.value,
+        productName: product.value.name,
+        productArtist: product.value.artist,
+        productPrice: product.value.price,
+        productImage: product.value.image
+      })
     }
+    localStorage.setItem('cart',JSON.stringify(cart))
+    //刷新store
+    await cartStore.loadCart()
+    alert('已加入购物车（未登录，登录后同步）')
+  }else{
+    try{
+      await cartStore.addItem(product.value.id,quantity.value)
+      alert('添加成功！')
+    }catch(error){
+      console.error('加入购物车失败:', error)
+      alert('加入购物车失败')
+  }
+  }
+  
 }
 
 //返回上一页
