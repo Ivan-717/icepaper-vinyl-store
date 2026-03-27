@@ -19,3 +19,5 @@ mybatis:
 server:
   port: 8080
 
+jwt:
+  secret: bingzhi_vinyl_secret_key_2026_very_long_32bytes

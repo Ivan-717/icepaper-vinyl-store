@@ -4,19 +4,22 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+@Component
 public class JwtUtil {
 
     //签名秘钥：相当于私钥，只有服务器知道
     //实际项目放在配置文件里
-    private static final Key SECRET_KEY= Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET = "bingzhi_vinyl_secret_key_2026_very_long_32bytes";
 
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     //过期时间：七天（单位：毫秒）
     private static final long EXPIRATION=7*24*60*60*1000;
 
@@ -42,18 +45,35 @@ public class JwtUtil {
     //解析token
     //Claims是JWT框架的接口，用法上等同于JWt载荷数据的容器
     public static Claims parseToken(String token){
-        //parser():创建一个JWT解析器构建器
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)    //用秘钥验证签名
-                .build()
-                .parseClaimsJws(token)  //解析token
-                .getBody();  //获取payload
+        try{
+            //parser():创建一个JWT解析器构建器
+            return Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)    //用秘钥验证签名
+                    .build()
+                    .parseClaimsJws(token)  //解析token
+                    .getBody();  //获取payload
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     //从token获取用户信息
     public static Long getUserId(String token){
-        Claims claims=parseToken(token);
-        return claims.get("userId",Long.class);
+        try {
+            Claims claims = parseToken(token); // 解析token
+
+            // 关键：先判断 claims 是不是 null
+            if (claims == null) {
+                return null; // 无效token直接返回null
+            }
+
+            return claims.get("userId", Long.class);
+        } catch (Exception e) {
+            // 任何异常都返回null，绝不崩溃
+            return null;
+        }
     }
 
     public static String getUsername(String token){

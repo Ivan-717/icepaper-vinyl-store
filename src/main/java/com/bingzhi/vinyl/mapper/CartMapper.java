@@ -1,0 +1,52 @@
+package com.bingzhi.vinyl.mapper;
+
+import com.bingzhi.vinyl.entity.Cart;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+@Mapper
+public interface CartMapper {
+    //获取用户购物车
+    /*左连接product表
+     * on：连接条件
+     * where：只查当前用户的购物车
+     ***/
+    @Select("SELECT c.id, c.user_id as userId, c.product_id as productId, c.quantity, " +
+            "c.create_time as createTime, c.update_time as updateTime, " +
+            "p.name as productName, p.artist as productArtist, p.price as productPrice, p.image as productImage " +
+            "FROM cart c LEFT JOIN product p ON c.product_id = p.id " +
+            "WHERE c.user_id = #{userId} ORDER BY c.id DESC")
+    List<Cart> findByUserId(@Param("userId") Long userId);
+
+    //根据用户ID和商品ID查询
+    @Select("SELECT * FROM cart WHERE user_id=#{userId} and product_id=#{productId}")
+    Cart findByUserAndProduct(@Param("userId") Long userId,@Param("productId")Long productId);
+
+    //添加购物车
+    @Insert("INSERT INTO cart (user_id, product_id, quantity, create_time, update_time) " +
+            "VALUES (#{userId}, #{productId}, #{quantity}, NOW(), NOW())")
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    void insert(Cart cart);
+
+    //更新数量
+    @Update("UPDATE cart SET quantity=#{quantity},update_time=NOW() Where id=#{id}")
+    void updateQuantity(@Param("id") Long id,@Param("quantity") Integer quantity);
+
+    //删除购物车项
+    @Delete("DELETE FROM cart WHERE id=#{id}")
+    void deleteById(@Param("id") Long id);
+
+    //清空购物车
+    @Delete("DELETE FROM cart WHERE user_id=#{userId}")
+    void deleteByUserId(@Param("userId") Long userId);
+
+
+
+
+
+
+
+
+
+}
