@@ -111,6 +111,8 @@ const goToSearch=()=>{
 .home {
   text-align: center;
   padding: 0 2rem 2rem;
+  background: #fef9f9;
+  min-height: 100vh;
 }
 
 /* 分类按钮容器 */
@@ -124,36 +126,43 @@ const goToSearch=()=>{
 
 .categories button {
   padding: 0.5rem 1.5rem;
-  border: 1px solid #42b983;
+  border: 1px solid #ffb3b3;
   background: white;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.3s;
+  color: #d96c6c;
+  font-weight: 500;
 }
 
 .categories button:hover {
-  background: #42b983;
+  background: #ffb3b3;
   color: white;
+  border-color: #ffb3b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.3);
 }
 
 .categories button.active {
-  background: #42b983;
+  background: #ffb3b3;
   color: white;
-  border-color: #42b983;
+  border-color: #ffb3b3;
+  box-shadow: 0 2px 8px rgba(255, 179, 179, 0.4);
 }
 
 .loading {
   padding: 2rem;
-  color: #666;
+  color: #ffb3b3;
+  font-size: 1rem;
 }
 
 /* 商品列表网格布局 - 固定5列 */
 .products {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  margin-top: 1.5rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
   justify-content: start;
   width: 100%;
 }
@@ -181,43 +190,52 @@ const goToSearch=()=>{
 }
 
 .product-card {
-  border: 1px solid #eee;
-  border-radius: 8px;
+  border: 1px solid #ffe0e0;
+  border-radius: 20px;
   padding: 1rem;
   text-align: left;
   transition: all 0.3s;
   background: white;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .product-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 179, 179, 0.15);
+  transform: translateY(-4px);
+  border-color: #ffd0d0;
 }
 
 .product-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
+  border-radius: 16px;
+  margin-bottom: 0.75rem;
 }
 
 .product-card h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin: 0.5rem 0 0.25rem;
-  color: #333;
+  color: #4a4a4a;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .product-card .artist {
-  color: #666;
-  font-size: 0.9rem;
+  color: #9e9e9e;
+  font-size: 0.85rem;
   margin: 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .product-card .price {
-  color: #f56c6c;
+  color: #ff9b9b;
   font-weight: bold;
   font-size: 1.2rem;
   margin: 0.5rem 0 0;
@@ -226,38 +244,44 @@ const goToSearch=()=>{
 /* 首页搜索框 */
 .home-search {
   display: flex;
-  gap: 0.5rem;
-  max-width: 500px;
-  margin: 0 auto 1.5rem;
+  gap: 0.75rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  padding-top: 1rem;
 }
 
 .home-search-input {
   flex: 1;
-  padding: 0.75rem 1rem;
-  border: 2px solid #eee;
-  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #ffe0e0;
+  border-radius: 50px;
   font-size: 1rem;
   transition: all 0.3s;
+  background: white;
 }
 
 .home-search-input:focus {
   outline: none;
-  border-color: #42b983;
-  box-shadow: 0 0 0 3px rgba(66, 185, 131, 0.1);
+  border-color: #ffb3b3;
+  box-shadow: 0 0 0 3px rgba(255, 179, 179, 0.2);
 }
 
 .home-search-btn {
-  padding: 0.75rem 1.5rem;
-  background: #42b983;
+  padding: 0.8rem 2rem;
+  background: #ffb3b3;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background 0.3s;
+  font-weight: 500;
+  transition: all 0.3s;
+  box-shadow: 0 2px 6px rgba(255, 179, 179, 0.3);
 }
 
 .home-search-btn:hover {
-  background: #3aa876;
+  background: #ff9b9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.4);
 }
 </style>
