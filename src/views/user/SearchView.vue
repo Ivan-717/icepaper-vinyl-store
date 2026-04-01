@@ -86,10 +86,11 @@ const goToProduct=(id:number)=>{
 
 <style scoped>
 .search-page {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   min-height: calc(100vh - 80px);
+  background: #fef9f9;
 }
 
 /* 头部样式 */
@@ -99,67 +100,76 @@ const goToProduct=(id:number)=>{
   gap: 1rem;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid #ffe0e0;
 }
 
 .back-btn {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #ffb3b3;
   background: white;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  color: #d96c6c;
+  transition: all 0.3s;
 }
 
 .back-btn:hover {
-  background: #f5f5f5;
+  background: #ffb3b3;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.search-header h2 {
+  color: #d96c6c;
+  font-weight: 500;
+  font-size: 1.3rem;
 }
 
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: #ffb3b3;
+  font-size: 1rem;
 }
 
 /* 搜索结果信息 */
 .result-count {
   margin-bottom: 1rem;
-  color: #666;
+  color: #9e9e9e;
+  font-size: 0.9rem;
 }
 
-/* ===== 商品网格布局 - 负margin补偿方案 ===== */
+/* ===== 商品网格布局 ===== */
 .product-grid {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  margin: 0 -0.75rem !important;        /* 负margin抵消卡片左右padding */
-  width: calc(100% + 1.5rem) !important; /* 补偿负margin增加的宽度 */
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 1.5rem !important;
   margin-top: 1rem !important;
 }
 
-/* 商品卡片 - 用padding控制间距，保证宽度准确 */
+/* 商品卡片 */
 .product-card {
-  width: 25% !important;                 /* 精确的4列，不受gap影响 */
-  padding: 0 0.75rem !important;         /* 左右内边距作为卡片间距 */
-  margin-bottom: 1.5rem !important;      /* 下边距 */
-  box-sizing: border-box !important;
   cursor: pointer;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s;
+  border: 1px solid #ffe0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(255, 179, 179, 0.15);
+  border-color: #ffd0d0;
 }
 
 /* 卡片内部样式 */
 .product-card-inner {
-  border: 1px solid #eee;
-  border-radius: 8px;
   padding: 1rem;
-  background: white;
-  transition: all 0.3s;
-  height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.product-card-inner:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
 }
 
 /* 商品图片 */
@@ -167,16 +177,16 @@ const goToProduct=(id:number)=>{
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-  display: block;
+  border-radius: 16px;
+  margin-bottom: 0.75rem;
 }
 
 /* 商品标题 */
 .product-card h3 {
   margin: 0.5rem 0 0.25rem;
   font-size: 1rem;
-  color: #333;
+  color: #4a4a4a;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -184,8 +194,8 @@ const goToProduct=(id:number)=>{
 
 /* 艺术家 */
 .product-card .artist {
-  color: #666;
-  font-size: 0.9rem;
+  color: #9e9e9e;
+  font-size: 0.85rem;
   margin: 0.25rem 0;
   white-space: nowrap;
   overflow: hidden;
@@ -194,52 +204,65 @@ const goToProduct=(id:number)=>{
 
 /* 价格 */
 .product-card .price {
-  color: #f56c6c;
+  color: #ff9b9b;
   font-weight: bold;
   font-size: 1.1rem;
   margin: 0.5rem 0 0;
 }
 
-/* 响应式：平板屏幕3列 */
-@media (max-width: 992px) {
-  .product-card {
-    width: 33.333% !important;
+/* 响应式 */
+@media (max-width: 1400px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
-
-/* 响应式：手机屏幕2列 */
-@media (max-width: 768px) {
-  .product-card {
-    width: 50% !important;
+@media (max-width: 1100px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
-
-/* 响应式：小手机屏幕1列 */
-@media (max-width: 480px) {
-  .product-card {
-    width: 100% !important;
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 500px) {
+  .product-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
 /* 无结果样式 */
 .no-results {
   text-align: center;
-  padding: 3rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  padding: 4rem;
+  background: white;
+  border-radius: 24px;
+  border: 1px solid #ffe0e0;
+}
+
+.no-results p {
+  color: #d96c6c;
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 .home-btn {
   margin-top: 1rem;
-  padding: 0.5rem 1.5rem;
-  background: #42b983;
+  padding: 0.6rem 2rem;
+  background: #ffb3b3;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 40px;
   cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
 }
 
 .home-btn:hover {
-  background: #3aa876;
+  background: #ff9b9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.3);
 }
 </style>

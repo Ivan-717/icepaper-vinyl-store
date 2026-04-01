@@ -32,3 +32,8 @@ export const updateAddress=(data:Address)=>{
 export const deleteAddress=(id:number)=>{
     return request.delete(`user/address/${id}`)
 }
+
+//设为默认地址
+export const setDefaultAddress=(id:number)=>{
+    return request.put(`/user/address/default/${id}`)
+}

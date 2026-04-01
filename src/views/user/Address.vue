@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref,onMounted } from 'vue';
-import { getAddressList,addAddress, updateAddress, deleteAddress, type Address } from '@/api/address';
+import { setDefaultAddress,getAddressList,addAddress, updateAddress, deleteAddress, type Address } from '@/api/address';
 import provinces from 'china-division/dist/provinces.json'
 import cities from 'china-division/dist/cities.json'
 import areas from 'china-division/dist/areas.json'
@@ -184,6 +184,17 @@ const handleDelete=async(id:number)=>{
     }
 }
 
+//设为默认
+const setDefault=async(id:number)=>{
+  try{
+    await setDefaultAddress(id)
+    loadAddresses()
+  }catch(error){
+    console.error('设置默认失败：',error)
+    alert('操作失败')
+  }
+}
+
 
 onMounted(()=>{
     loadAddresses()
@@ -211,7 +222,7 @@ onMounted(()=>{
                     <div class="receiver">
                         <span class="name">{{ addr.receiver }}</span>
                         <span class="phone">{{ addr.phone }}</span>
-                        <span v-if="addr.isDefault===1" class="default-badge">默认</span>
+                        <span v-if="addr.isDefault===1" class="default-badge" >默认</span>
                     </div>
                 </div>    
                 <div class="address-detail">
@@ -221,7 +232,7 @@ onMounted(()=>{
                 <div class="address-actions">
                     <button class="edit-btn" @click="openEdit(addr)">编辑</button>
                     <button class="delete-btn" @click="handleDelete(addr.id!)">删除</button>
-                    <button v-if="addr.isDefault!==1" class="set-default-btn" >设为默认</button>
+                    <button v-if="addr.isDefault!==1" class="set-default-btn" @click="setDefault(addr.id!)" >设为默认</button>
                 </div> 
             </div>
         </div>

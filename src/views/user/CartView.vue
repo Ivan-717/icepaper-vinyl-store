@@ -111,48 +111,63 @@ const continueShopping=()=>{
 </template>
 
 <style scoped>
-/* 购物车主容器 */
+/* 购物车主容器 - 全宽 */
 .cart {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1rem 2rem 2rem;
+  background: #fef9f9;
+  min-height: 100vh;
+  width: 100%;
 }
 
 /* 页面主标题 */
 .cart h1 {
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #d96c6c;
+  font-weight: 500;
+  font-size: 1.8rem;
 }
 
 /* ---------- 空购物车样式 ---------- */
 .empty-cart {
   text-align: center;
-  padding: 3rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  padding: 4rem;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid #ffe0e0;
 }
 
 .empty-cart p {
-  color: #666;
+  color: #d96c6c;
   margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 /* ---------- 购物车列表样式 ---------- */
 .cart-list {
-  border: 1px solid #eee;
-  border-radius: 8px;
+  border: 1px solid #ffe0e0;
+  border-radius: 20px;
   overflow: hidden;
   margin-bottom: 1.5rem;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
-/* 单个购物车项：网格布局 */
+/* 单个购物车项：网格布局，列宽自适应 */
 .cart-item {
   display: grid;
-  grid-template-columns: 100px 1fr 120px 100px 40px;
+  grid-template-columns: 120px minmax(200px, 1.5fr) 140px 120px 60px;
   gap: 1rem;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
+  padding: 1.2rem;
+  border-bottom: 1px solid #ffe0e0;
+  transition: background 0.2s;
+}
+
+.cart-item:hover {
+  background: #fff5f5;
 }
 
 .cart-item:last-child {
@@ -161,29 +176,32 @@ const continueShopping=()=>{
 
 /* 商品图片 */
 .item-image {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 /* 商品信息 */
 .item-info h3 {
-  margin: 0 0 0.25rem;
-  font-size: 1rem;
-  color: #333;
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #4a4a4a;
+  font-weight: 600;
 }
 
 .item-artist {
   margin: 0 0 0.25rem;
   font-size: 0.9rem;
-  color: #666;
+  color: #9e9e9e;
 }
 
 .item-price {
   margin: 0;
   font-weight: bold;
-  color: #f56c6c;
+  color: #ff9b9b;
+  font-size: 1.1rem;
 }
 
 /* 数量选择器 */
@@ -191,56 +209,70 @@ const continueShopping=()=>{
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
 }
 
 .item-quantity button {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ddd;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ffe0e0;
   background: white;
-  border-radius: 4px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #d96c6c;
 }
 
 .item-quantity button:hover:not(:disabled) {
-  background: #f5f5f5;
+  background: #ffb3b3;
+  border-color: #ffb3b3;
+  color: white;
 }
 
 .item-quantity button:disabled {
   color: #ccc;
   cursor: not-allowed;
+  border-color: #eee;
 }
 
 .item-quantity span {
-  min-width: 30px;
+  min-width: 36px;
   text-align: center;
+  font-weight: 500;
+  color: #4a4a4a;
+  font-size: 1rem;
 }
 
 /* 小计金额 */
 .item-subtotal {
   font-weight: bold;
-  color: #333;
+  color: #d96c6c;
+  font-size: 1.1rem;
+  text-align: right;
 }
 
 /* 删除按钮 */
 .remove-btn {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ff4444;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ffe0e0;
   background: white;
-  color: #ff4444;
-  border-radius: 4px;
+  color: #ff9b9b;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
+  margin: 0 auto;
 }
 
 .remove-btn:hover {
-  background: #ff4444;
+  background: #ffb3b3;
+  border-color: #ffb3b3;
   color: white;
 }
 
@@ -249,36 +281,40 @@ const continueShopping=()=>{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
+  padding: 1.2rem 2rem;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #ffe0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 /* 总计区域 */
 .total {
   font-size: 1.2rem;
+  color: #4a4a4a;
 }
 
 .total-price {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #f56c6c;
+  color: #ff9b9b;
+  margin-left: 0.5rem;
 }
 
-/* 操作按钮组 - 按钮分开，有间距 */
+/* 操作按钮组 */
 .cart-actions {
   display: flex;
-  gap: 12px;
+  gap: 1rem;
 }
 
 /* 通用按钮样式 */
 .clear-btn,
 .continue-btn,
 .checkout-btn {
-  padding: 8px 20px;
-  border-radius: 6px;
+  padding: 10px 28px;
+  border-radius: 40px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.95rem;
   font-weight: 500;
   transition: all 0.3s;
   white-space: nowrap;
@@ -288,34 +324,89 @@ const continueShopping=()=>{
 /* 清空按钮 */
 .clear-btn {
   background: white;
-  border: 1px solid #ff4444;
-  color: #ff4444;
+  border: 1px solid #ffb3b3;
+  color: #ff9b9b;
 }
 
 .clear-btn:hover {
-  background: #ff4444;
+  background: #ffb3b3;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.3);
 }
 
 /* 继续购物按钮 */
 .continue-btn {
   background: white;
-  border: 1px solid #42b983;
-  color: #42b983;
+  border: 1px solid #ffb3b3;
+  color: #ff9b9b;
 }
 
 .continue-btn:hover {
-  background: #42b983;
+  background: #ffb3b3;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.3);
 }
 
 /* 结算按钮 */
 .checkout-btn {
-  background: #42b983;
+  background: #ffb3b3;
   color: white;
+  box-shadow: 0 2px 6px rgba(255, 179, 179, 0.3);
 }
 
 .checkout-btn:hover {
-  background: #3aa876;
+  background: #ff9b9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.4);
+}
+
+/* 响应式：小屏幕调整 */
+@media (max-width: 900px) {
+  .cart-item {
+    grid-template-columns: 100px 1fr 100px 80px 40px;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+  
+  .item-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .item-info h3 {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .cart-item {
+    grid-template-columns: 80px 1fr 80px 70px 36px;
+    gap: 0.5rem;
+  }
+  
+  .item-quantity button {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .clear-btn,
+  .continue-btn,
+  .checkout-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .cart-item {
+    grid-template-columns: 70px 1fr 70px 60px 32px;
+  }
+  
+  .item-image {
+    width: 60px;
+    height: 60px;
+  }
 }
 </style>

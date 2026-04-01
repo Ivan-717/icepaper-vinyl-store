@@ -164,28 +164,34 @@ const goBack=()=>{
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: #fef9f9;
+  min-height: 100vh;
 }
 
 /* 返回按钮 */
 .back-btn {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #ffb3b3;
   background: white;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
   margin-bottom: 2rem;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  color: #d96c6c;
 }
 
 .back-btn:hover {
-  background: #f5f5f5;
+  background: #ffb3b3;
+  color: white;
+  transform: translateY(-2px);
 }
 
 /* 加载状态和未找到提示 */
 .loading, .not-found {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: #ffb3b3;
+  font-size: 1rem;
 }
 
 /* 详情内容容器：使用网格布局，左右两列 */
@@ -199,20 +205,22 @@ const goBack=()=>{
 .image-container img {
   width: 100%;
   max-width: 500px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(255, 179, 179, 0.2);
+  border: 1px solid #ffe0e0;
 }
 
 /* 右侧信息容器 */
 .info-container h1 {
   font-size: 2rem;
   margin: 0 0 0.5rem;
-  color: #333;
+  color: #d96c6c;
+  font-weight: 500;
 }
 
 .info-container .artist {
   font-size: 1.2rem;
-  color: #666;
+  color: #9e9e9e;
   margin: 0 0 1.5rem;
   font-weight: normal;
 }
@@ -221,8 +229,8 @@ const goBack=()=>{
 .price-section {
   margin: 1.5rem 0;
   padding: 1rem 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid #ffe0e0;
+  border-bottom: 1px solid #ffe0e0;
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -230,12 +238,12 @@ const goBack=()=>{
 
 .price-label {
   font-size: 1rem;
-  color: #666;
+  color: #9e9e9e;
 }
 
 .price {
   font-size: 2rem;
-  color: #f56c6c;
+  color: #ff9b9b;
   font-weight: bold;
 }
 
@@ -248,16 +256,17 @@ const goBack=()=>{
 }
 
 .stock-label {
-  color: #666;
+  color: #9e9e9e;
 }
 
 .stock {
   font-weight: 500;
+  color: #4a4a4a;
 }
 
 /* 库存不足时的样式 */
 .stock.low {
-  color: #f56c6c;
+  color: #ff9b9b;
 }
 
 /* 专辑简介区域 */
@@ -267,12 +276,15 @@ const goBack=()=>{
 
 .description-section h3 {
   margin: 0 0 0.5rem;
-  color: #333;
+  color: #4a4a4a;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .description-section p {
-  color: #666;
+  color: #9e9e9e;
   line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 /* 底部操作区域 */
@@ -280,33 +292,36 @@ const goBack=()=>{
   display: flex;
   gap: 1rem;
   align-items: center;
+  margin-top: 2rem;
 }
 
 /* 数量选择器容器 */
 .quantity-selector {
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #ffe0e0;
+  border-radius: 40px;
   overflow: hidden;
+  background: white;
 }
 
 /* 数量按钮 */
 .quantity-selector button {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: white;
   cursor: pointer;
   font-size: 1.2rem;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  color: #d96c6c;
 }
 
 .quantity-selector button:hover:not(:disabled) {
-  background: #f5f5f5;
+  background: #ffb3b3;
+  color: white;
 }
 
-/* 禁用状态的按钮 */
 .quantity-selector button:disabled {
   color: #ccc;
   cursor: not-allowed;
@@ -315,12 +330,13 @@ const goBack=()=>{
 /* 数量输入框 */
 .quantity-selector input {
   width: 60px;
-  height: 40px;
+  height: 44px;
   border: none;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  border-left: 1px solid #ffe0e0;
+  border-right: 1px solid #ffe0e0;
   text-align: center;
   font-size: 1rem;
+  color: #4a4a4a;
 }
 
 .quantity-selector input:focus {
@@ -330,18 +346,41 @@ const goBack=()=>{
 /* 加入购物车按钮 */
 .add-to-cart-btn {
   flex: 1;
-  height: 40px;
-  background: #42b983;
+  height: 48px;
+  background: #ffb3b3;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 40px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 179, 179, 0.3);
 }
 
 .add-to-cart-btn:hover {
-  background: #3aa876;
+  background: #ff9b9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 179, 0.4);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .detail-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .product-detail {
+    padding: 1rem;
+  }
+  
+  .info-container h1 {
+    font-size: 1.5rem;
+  }
+  
+  .price {
+    font-size: 1.5rem;
+  }
 }
 </style>
