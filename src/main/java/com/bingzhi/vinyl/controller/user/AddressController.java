@@ -72,4 +72,18 @@ public class AddressController {
         return result;
     }
 
+    //设为默认地址
+    @PutMapping("/default/{id}")
+    public Map<String,String> setDefault(@PathVariable Long id,@RequestHeader("Authorization") String token){
+        Long userId=JwtUtil.getUserId(token);
+
+        addressMapper.resetDefault(userId);
+
+        addressMapper.updateDefault(id,1);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "设置成功");
+        return result;
+    }
+
 }

@@ -35,5 +35,9 @@ public interface AddressMapper {
     @Update("UPDATE address SET is_default=0 where user_id=#{userId}")
     void resetDefault(@Param("userId") Long userId);
 
+    //设定指定地址为默认
+    @Update("UPDATE address SET is_default=#{isDefault} Where id=#{id}")
+    void updateDefault(@Param("id") Long id,@Param("isDefault") Integer isDefault);
+
 }
 
