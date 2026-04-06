@@ -3,6 +3,7 @@
   import { useCartStore } from './stores/cart';
   import { useRoute,useRouter } from 'vue-router';
   import { computed } from 'vue';
+  import { onMounted } from 'vue';
 
 
   const cartStore=useCartStore()
@@ -35,6 +36,10 @@
     router.push('/')
     setTimeout(() => window.location.reload(), 100)
   }
+
+  onMounted(()=>{
+    cartStore.loadCart()
+  })
 </script>
 
 <template>

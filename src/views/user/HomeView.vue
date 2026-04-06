@@ -2,6 +2,7 @@
 import { ref,onMounted, computed } from 'vue';
 import { getCategories,getProductByCategory,type Category,type Product } from '@/api/product';
 import { useRouter } from 'vue-router';
+import request from '@/api/request';
 
 //Category[]是ref的数据类型
 //([])初始化空数组
@@ -9,7 +10,8 @@ const categories=ref<Category[]>([])
 //商品列表
 const products=ref<Product[]>([])
 //当前准备的id(默认第一个)
-const activeCategory=ref<number>(1)
+//0表示显示所有商品
+const activeCategory=ref<number>(0)
 //是否正在加载数据
 const loading=ref(false)
 
@@ -18,6 +20,18 @@ const router=useRouter()
 //搜索相关
 const searchKeyword=ref('')
 
+//加载所有商品
+const loadAllProducts=async()=>{
+  loading.value=true
+  try{
+    const res=await request.get('/products/all')
+    products.value=res.data
+  }catch(error){
+    console.error('加载全部商品失败：',error)
+  }finally{
+    loading.value=false
+  }
+}
 
 
 //加载分类
@@ -26,11 +40,7 @@ onMounted(async() => {
         const res=await getCategories()
         categories.value=res.data
         
-        //如果分类不为空，自动加载第一个分类的商品
-        if(categories.value.length>0){
-            activeCategory.value=categories.value[0]?.id ?? 1
-            loadProducts(activeCategory.value)
-        }
+        await loadProducts(0)
     }catch(error){
         console.error('加载分类失败',error)
     }
@@ -40,8 +50,12 @@ onMounted(async() => {
 const loadProducts=async(categoryId:number)=>{
     loading.value=true //开始加载
     try{
-        const res=await getProductByCategory(categoryId)
-        products.value=res.data
+        if(categoryId===0){
+          await loadAllProducts()
+        }else{
+          const res=await getProductByCategory(categoryId)
+          products.value=res.data
+        }
     }catch(error){
         console.error('加载商品失败:',error)
     }finally{
@@ -65,6 +79,17 @@ const goToSearch=()=>{
 
 <template>
     <div class="home">
+
+      <!-- 套餐推荐横幅 -->
+      <div class="combo-banner" @click="router.push('/combos')">
+        <div class="banner-content">
+          <span class="banner-icon">🍽️</span>
+          <span class="banner-text">超值套餐，限时优惠</span>
+          <span class="banner-arrow">→</span>
+        </div>
+      </div> 
+
+
         <div class="home-search">
           <input type="text"
             v-model="searchKeyword"
@@ -75,6 +100,12 @@ const goToSearch=()=>{
         </div>
 
         <div class="categories">
+            <button  
+                :class="{active:activeCategory === 0}"
+                @click="changeCategory(0)" >
+                全部
+            </button>
+
             <button v-for="cat in categories" 
                 :key="cat.id" 
                 :class="{active:activeCategory === cat.id}"
@@ -283,5 +314,42 @@ const goToSearch=()=>{
   background: #ff9b9b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 179, 179, 0.4);
+}
+
+/* 套餐推荐横幅 */
+.combo-banner {
+  background: linear-gradient(135deg, #ffb3b3, #ff9b9b);
+  border-radius: 40px;
+  margin: 0 0 2rem 0;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 179, 179, 0.3);
+}
+
+.combo-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 179, 179, 0.4);
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: white;
+  font-weight: 500;
+}
+
+.banner-icon {
+  font-size: 1.3rem;
+}
+
+.banner-text {
+  font-size: 1rem;
+}
+
+.banner-arrow {
+  font-size: 1.2rem;
 }
 </style>

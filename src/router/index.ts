@@ -45,6 +45,10 @@ const router = createRouter({
       name:'admin-login',
       component:AdminLogin
     },{
+      path:'/combos',
+      name:'combo',
+      component:()=>import('../views/user/Combos.vue')
+    },{
       path:'/admin',
       component:AdminLayout,
       children:[
