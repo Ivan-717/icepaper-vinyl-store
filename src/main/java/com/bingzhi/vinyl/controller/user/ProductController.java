@@ -16,6 +16,11 @@ public class ProductController {
     @Autowired
     private ProductMapper productMapper;
 
+    @GetMapping("/all")
+    public List<Product> getAllProducts(){
+        return productMapper.findAll();
+    }
+
     @GetMapping("/category/{categoryId}")
     public List<Product> getByCategory(@PathVariable Long categoryId){
         return productMapper.findByCategoryId(categoryId);

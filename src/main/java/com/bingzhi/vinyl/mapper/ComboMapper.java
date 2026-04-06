@@ -17,6 +17,10 @@ public interface ComboMapper {
     @Select("SELECT * FROM combo_item where combo_id=#{comboId}")
     List<ComboItem> findItemsByComboId(@Param("comboId") Long comboId);
 
+    //根据状态查询套餐
+    @Select("SELECT * FROM combo WHERE status=#{status} Order by id ASC")
+    List<Combo> findByStatus(@Param("status") Integer status);
+
     @Insert("INSERT INTO combo (name, price, image, description, status, create_time, update_time) " +
             "VALUES (#{name}, #{price}, #{image}, #{description}, #{status}, NOW(), NOW())")
     //自增id
