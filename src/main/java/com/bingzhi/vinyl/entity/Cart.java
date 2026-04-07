@@ -18,4 +18,7 @@ public class Cart {
     private String productArtist;
     private Double productPrice;
     private String productImage;
+
+    private Long comboId;   // 套餐ID（如果是套餐就有值）
+    private Integer type;   // 0商品 1套餐
 }

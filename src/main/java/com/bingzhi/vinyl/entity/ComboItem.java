@@ -10,6 +10,7 @@ public class ComboItem {
     private Long comboId;
     private Long productId;
     private Integer quantity;
+    private String productImage;
 
     //关联的商品信息（方便前端显示）
     private String productName;

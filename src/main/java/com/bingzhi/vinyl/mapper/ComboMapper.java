@@ -1,5 +1,6 @@
 package com.bingzhi.vinyl.mapper;
 
+import com.bingzhi.vinyl.entity.Cart;
 import com.bingzhi.vinyl.entity.Combo;
 import com.bingzhi.vinyl.entity.ComboItem;
 import org.apache.ibatis.annotations.*;
@@ -46,6 +47,7 @@ public interface ComboMapper {
     //删除套餐的所有商品关联
     @Delete("DELETE FROM combo_item where combo_id=#{comboId}")
     void deleteItemsByComboId(@Param("comboId") Long comboId);
+
 
 
 

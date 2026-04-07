@@ -1,11 +1,14 @@
 package com.bingzhi.vinyl.controller.user;
 
 import com.bingzhi.vinyl.entity.Cart;
+import com.bingzhi.vinyl.entity.Combo;
 import com.bingzhi.vinyl.mapper.CartMapper;
+import com.bingzhi.vinyl.mapper.ComboMapper;
 import com.bingzhi.vinyl.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,9 @@ public class CartController {
     @Autowired
     private CartMapper cartMapper;
 
+    @Autowired
+    private ComboMapper comboMapper;
+
     public CartController() {
         System.out.println("CartController 已加载");
     }
@@ -25,19 +31,21 @@ public class CartController {
     public List<Cart> list(@RequestHeader("Authorization") String token){
         System.out.println("获取购物车，token: " + token);
         Long userId= JwtUtil.getUserId(token);
-        System.out.println("userId: " + userId);
-        return cartMapper.findByUserId(userId);
+
+        List<Cart> products = cartMapper.findProductsByUserId(userId);
+        List<Cart> combos = cartMapper.findCombosByUserId(userId);
+
+        List<Cart> all = new ArrayList<>();
+        all.addAll(products);
+        all.addAll(combos);
+        return all;
     }
 
     //添加商品到购物车
     @PostMapping
     public Map<String,Object> add(@RequestHeader("Authorization") String token,@RequestBody Map<String,Object> request){
-        System.out.println("=== 添加购物车 ===");
-        System.out.println("收到的token: " + token);
-        System.out.println("productId: " + request.get("productId"));
-        System.out.println("quantity: " + request.get("quantity"));
+
         Long userId=JwtUtil.getUserId(token);
-        System.out.println("解析出的userId: " + userId);
 
         //获取前端传来的商品Id，并转为Long类型
         Long productId=Long.valueOf(request.get("productId").toString());
@@ -59,6 +67,36 @@ public class CartController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "添加成功");
+        return result;
+    }
+
+    //新增套餐
+    @PostMapping("/combo")
+    public Map<String, Object> addCombo(@RequestHeader("Authorization") String token, @RequestBody Map<String, Object> request) {
+        System.out.println("addCombo 方法被调用了");  // 加这行
+        Long userId = JwtUtil.getUserId(token);
+        Long comboId = Long.valueOf(request.get("comboId").toString());
+        Integer quantity = (Integer) request.getOrDefault("quantity", 1);
+
+        Combo combo = comboMapper.findById(comboId);
+        if (combo == null) {
+            throw new RuntimeException("套餐不存在");
+        }
+
+        Cart exist = cartMapper.findByUserAndCombo(userId, comboId);
+        if (exist != null) {
+            cartMapper.updateQuantity(exist.getId(), exist.getQuantity() + quantity);
+        } else {
+            Cart cart = new Cart();
+            cart.setUserId(userId);
+            cart.setComboId(comboId);
+            cart.setQuantity(quantity);
+            cartMapper.insertCombo(cart);
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "套餐已加入购物车");
         return result;
     }
 
