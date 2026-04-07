@@ -39,7 +39,7 @@ onMounted(()=>{
         </div>
 
         <div v-else class="combo-list">
-            <div v-for="combo in comboList" :key="combo.id" class="combo-card" @click="router.push('/combo/${combo.id}')">
+            <div v-for="combo in comboList" :key="combo.id" class="combo-card" @click="router.push(`/combo/${combo.id}`)">
                 <img :src="combo.image" :alt="combo.name">
                 <div class="combo-info">
                     <h3>{{ combo.name }}</h3>

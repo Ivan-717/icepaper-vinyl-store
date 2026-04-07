@@ -34,7 +34,7 @@ export const useCartStore=defineStore('cart',()=>{
         }
     }
 
-      //添加商品
+    //添加商品
     const addItem =async(productId:number,quantity:number=1)=>{
         const token=localStorage.getItem('userToken')
 
@@ -68,7 +68,42 @@ export const useCartStore=defineStore('cart',()=>{
               console.error('添加失败:', error)
               throw error
             }
-      }
+    }
+
+    //添加套餐
+    const addCombo=async(combo:any,comboItems:any[])=>{
+        const token=localStorage.getItem('userToken')
+         console.log('发送套餐数据:', { comboId: combo.id, quantity: 1 })  // 加这行
+
+        if(!token){
+            const cart=JSON.parse(localStorage.getItem('cart')||'[]')
+            //套餐作为一个特殊商品加入，标记isCombo=true
+            cart.push({
+                id:nanoid(),
+                comboId:combo.id,
+                productName: combo.name,        // 改成 productName
+                productPrice: combo.price,      // 改成 productPrice
+                productImage: combo.image,      // 改成 productImage
+                quantity: 1,
+                items: comboItems
+            })
+            localStorage.setItem('cart',JSON.stringify(cart))
+            items.value=cart
+            alert('套餐已加入购物车')
+        }else{
+            try{
+                await request.post('/user/cart/combo',{
+                    comboId: combo.id,
+                    quantity:1
+                })
+                await loadCart()
+                alert('套餐已加入购物车')
+            }catch(error){
+                console.error('加入购物车失败:', error)
+                alert('操作失败')
+            }
+        }
+    }
 
     //修改数量
     const updateQuantity=async(id:number,quantity:number)=>{
@@ -174,6 +209,7 @@ export const useCartStore=defineStore('cart',()=>{
         addItem,
         updateQuantity,
         removeItem,
-        syncLocalCart
+        syncLocalCart,
+        addCombo
     }
 })

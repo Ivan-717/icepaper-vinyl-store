@@ -49,6 +49,10 @@ const router = createRouter({
       name:'combo',
       component:()=>import('../views/user/Combos.vue')
     },{
+      path:'/combo/:id',
+      name:'combo-detail',
+      component:()=>import('../views/user/ComboDetail.vue')
+    },{
       path:'/admin',
       component:AdminLayout,
       children:[
