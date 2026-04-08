@@ -1,10 +1,7 @@
 package com.bingzhi.vinyl.mapper;
 
 import com.bingzhi.vinyl.entity.Orders;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,4 +27,10 @@ public interface OrderMapper {
     //更新订单状态
     @Update("UPDATE orders SET status = #{status},update_time=NOW() Where id=#{id}")
     void updateStatus(@Param("id") Long id,@Param("status") Integer status);
+
+    //插入订单
+    @Insert("INSERT INTO orders (order_no, user_id, total_amount, status, receiver, receiver_phone, address, remark, create_time, update_time) " +
+            "VALUES (#{orderNo}, #{userId}, #{totalAmount}, #{status}, #{receiver}, #{receiverPhone}, #{address}, #{remark}, #{createTime}, #{updateTime})")
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    void insert(Orders order);
 }

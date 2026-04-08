@@ -43,5 +43,8 @@ public interface ProductMapper {
     @Select("SELECT * FROM product ORDER BY id ASC ")
     List<Product> findAll();
 
+    //支付后，扣减数量
+    @Update("UPDATE product SET stock=stock-#{quantity} Where id = #{id}")
+    void decreaseStock(@Param("id") Long id,@Param("quantity") Integer quantity);
 
 }
