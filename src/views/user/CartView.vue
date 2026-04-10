@@ -36,6 +36,15 @@ const clearCart=()=>{
 const continueShopping=()=>{
     router.push('/')
 }
+
+const goToCheckout=()=>{
+  const token=localStorage.getItem('userToken')
+  if(!token){
+    alert('请先登录')
+    return
+  }
+  router.push('/checkout')
+}
 </script>
 
 <template>
@@ -100,7 +109,7 @@ const continueShopping=()=>{
                         继续购物
                     </button>
 
-                    <button class="checkout-btn">
+                    <button class="checkout-btn" @click="goToCheckout()">
                         去结算
                     </button>
                 </div>
