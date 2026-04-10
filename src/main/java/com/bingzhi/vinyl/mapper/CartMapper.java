@@ -12,11 +12,11 @@ public interface CartMapper {
      * on：连接条件
      * where：只查当前用户的购物车
      ***/
-    @Select("SELECT c.id, c.user_id as userId, c.product_id as productId, c.quantity, " +
+    @Select("SELECT c.id, c.user_id as userId, c.product_id as productId, c.combo_id as comboId, c.quantity, c.type, " +
             "c.create_time as createTime, c.update_time as updateTime, " +
             "p.name as productName, p.artist as productArtist, p.price as productPrice, p.image as productImage " +
             "FROM cart c LEFT JOIN product p ON c.product_id = p.id " +
-            "WHERE c.user_id = #{userId} AND c.type = 0 ORDER BY c.id DESC")
+            "WHERE c.user_id = #{userId} ORDER BY c.id DESC")
     List<Cart> findByUserId(@Param("userId") Long userId);
 
     //根据用户ID和商品ID查询
