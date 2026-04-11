@@ -33,4 +33,12 @@ public interface OrderMapper {
             "VALUES (#{orderNo}, #{userId}, #{totalAmount}, #{status}, #{receiver}, #{receiverPhone}, #{address}, #{remark}, #{createTime}, #{updateTime})")
     @Options(useGeneratedKeys = true,keyProperty = "id")
     void insert(Orders order);
+
+    //根据用户ID查询订单列表
+    @Select("SELECT * FROM orders WHERE user_id=#{userId} order by id desc")
+    List<Orders> findByUserId(@Param("userId") Long userID);
+
+    //根据用户ID和订单状态订单列表
+    @Select("SELECT * FROM orders WHERE user_id=#{userId} And status=#{status} order by id desc")
+    List<Orders> findByUserIdAndStatus(@Param("userId") Long userId,@Param("status") Integer status);
 }

@@ -138,7 +138,7 @@ public class OrderController {
         cartMapper.deleteByUserId(userId);
 
         Map<String,Object> result=new HashMap<>();
-        result.put("success:",true);
+        result.put("success",true);
         result.put("orderId",order.getId());
         result.put("orderNo",orderNo);
         result.put("totalAmount",totalAmount);
@@ -146,7 +146,45 @@ public class OrderController {
     }
 
 
+    //获取我的订单状态
+    @GetMapping("/my")
+    public List<Orders> getMyOrders(@RequestHeader("Authorization") String token,@RequestParam(required = false) Integer status){
+        Long userId=JwtUtil.getUserId(token);
+        if(status!=null&&status!=0){
+            return orderMapper.findByUserIdAndStatus(userId,status);
+        }
+        return orderMapper.findByUserId(userId);
+    }
 
+    //获取订单详情
+    @GetMapping("/{id}")
+    public Map<String,Object> getOrderDetail(@RequestHeader("Authorization") String token,@PathVariable Long id){
+        Long userId=JwtUtil.getUserId(token);
+        Orders order=orderMapper.findById(id);
+        if(order==null||order.getUserId()!=userId){
+            throw new RuntimeException("订单不存在");
+        }
+
+        List<OrderDetail> details=orderDetailMapper.findByOrderId(id);
+
+        //补充商品图片
+        for (OrderDetail detail:details){
+            Product product=productMapper.findById(detail.getProductId());
+            if(product!=null){
+                detail.setProductImage(product.getImage());
+            }else {
+                Combo combo=comboMapper.findById(detail.getProductId());
+                if(combo!=null){
+                    detail.setProductImage(combo.getImage());
+                }
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("order", order);
+        result.put("details", details);
+        return result;
+    }
 
 
 

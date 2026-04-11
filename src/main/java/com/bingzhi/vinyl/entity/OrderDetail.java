@@ -12,5 +12,6 @@ public class OrderDetail {
     private String productName;
     private BigDecimal price;
     private Integer quantity;
+    private String productImage;
 
 }
