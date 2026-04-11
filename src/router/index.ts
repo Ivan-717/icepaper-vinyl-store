@@ -57,6 +57,14 @@ const router = createRouter({
       name:'checkout',
       component:()=>import('../views/user/Checkout.vue')
     },{
+      path:'/orders',
+      name:'orders',
+      component:()=>import('../views/user/Orders.vue')
+    },{
+      path:'/orders/:id',
+      name:'order-detail',
+      component:()=>import('../views/user/OrderDetail.vue')
+    },{
       path:'/admin',
       component:AdminLayout,
       children:[

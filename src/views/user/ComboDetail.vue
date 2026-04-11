@@ -26,9 +26,10 @@ const loadDetail=async()=>{
     }
 }
 
-const addToCart=()=>{
+const addToCart=async()=>{
     cartStore.addCombo(combo.value,items.value)
-    alert('套餐已加入购物车')
+    await cartStore.loadCart()
+    
 }
 
 onMounted(()=>{

@@ -66,6 +66,7 @@
           <!-- 用户区域 -->
           <div class="user-section">
             <template v-if="isLoggedIn">
+              <RouterLink to="/orders" class="orders-link">我的订单</RouterLink>
               <RouterLink to="/address" class="address-link">我的地址</RouterLink>
               <span class="username">{{ useInfo?.username }}</span>
               <button class="logout-btn" @click="logout">退出</button>
@@ -231,6 +232,19 @@ header {
 }
 
 .address-link:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.orders-link, .address-link {
+  color: white;
+  text-decoration: none;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.8rem;
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+}
+
+.orders-link:hover, .address-link:hover {
   background: rgba(255,255,255,0.3);
 }
 </style>

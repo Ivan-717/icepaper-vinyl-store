@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cart';
 import { getAddressList,type Address } from '@/api/address';
 import request from '@/api/request';
-import { number } from 'echarts/core';
 
 const router=useRouter()
 const cartStore=useCartStore()
@@ -146,7 +145,7 @@ const loadAddress=async()=>{
                 共<span>{{ totalCount }}</span>件商品，合计：
                 <span class="total-price">¥{{ totalPrice.toFixed(2) }}</span>
             </div>
-            <button class="submit-btn" @click="submitOrder">提交订单</button>
+            <button class="submit-btn" @click="submitOrder()">提交订单</button>
         </div> 
 
 

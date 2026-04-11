@@ -68,6 +68,7 @@ const addToCart=async()=>{
   }else{
     try{
       await cartStore.addItem(product.value.id,quantity.value)
+      await cartStore.loadCart()
       alert('添加成功！')
     }catch(error){
       console.error('加入购物车失败:', error)
