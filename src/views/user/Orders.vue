@@ -78,8 +78,33 @@ const viewDetail=(orderId:number)=>{
 }
 
 //支付
-const payOrder=(orderId:number)=>{
-    alert('支付功能开发中')
+const handlePay=async(orderId:number)=>{
+  try{
+    const res=await request.put(`/user/order/pay/${orderId}`)
+    alert(res.data.message)
+    //刷新订单状态
+    loadOrders()
+    //刷新订单列表页
+    router.push('/orders')
+  }catch(error){
+    const err=error as any;
+    alert(err.response?.data?.message || '支付失败')
+  }
+}
+
+//取消订单
+const handleCancel=async(orderId:number)=>{
+  if(!confirm('确定要取消订单吗？')){
+    return
+  }
+  try{
+    const res=await request.put(`/user/order/cancel/${orderId}`)
+    alert(res.data.message)
+    loadOrders()
+    router.push('/orders')
+  }catch(error:any){
+    alert(error.response?.data?.message || '取消失败')
+  }
 }
 
 onMounted(()=>{
@@ -140,9 +165,10 @@ onMounted(()=>{
                         <span class="total-price">¥{{ order.totalAmount }}</span>
                     </div>
                     <div class="order-actions">
-                        <button v-if="order.status===1" class="pay-btn" @click="payOrder(order.id)">
+                        <button v-if="order.status===1" class="pay-btn" @click="handlePay(order.id)">
                             去支付
                         </button>
+                        <button v-if="order.status===1" class="cancel-btn" @click="handleCancel(order.id)">取消</button>
                         <button class="detail-btn" @click="viewDetail(order.id)">查看详情</button>
                     </div>
                 </div> 
@@ -360,7 +386,8 @@ h1 {
   gap: 0.8rem;
 }
 
-.pay-btn, .detail-btn {
+/* 通用按钮样式 */
+.pay-btn, .cancel-btn, .detail-btn {
   padding: 0.5rem 1.2rem;
   border-radius: 40px;
   cursor: pointer;
@@ -369,6 +396,7 @@ h1 {
   transition: all 0.3s;
 }
 
+/* 支付按钮 */
 .pay-btn {
   background: #ffb3b3;
   color: white;
@@ -380,6 +408,20 @@ h1 {
   transform: translateY(-2px);
 }
 
+/* 取消按钮 */
+.cancel-btn {
+  background: white;
+  border: 1px solid #ffb3b3;
+  color: #d96c6c;
+}
+
+.cancel-btn:hover {
+  background: #ffb3b3;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* 详情按钮 */
 .detail-btn {
   background: white;
   border: 1px solid #ffb3b3;

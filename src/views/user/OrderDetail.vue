@@ -59,6 +59,36 @@ onMounted(()=>{
     loadOrderDetail()
 })
 
+//支付
+const handlePay=async()=>{
+  try{
+    const res=await request.put(`/user/order/pay/${orderId}`)
+    alert(res.data.message)
+    //刷新订单状态
+    loadOrderDetail()
+    //刷新订单列表页
+    router.push('/order')
+  }catch(error){
+    const err=error as any;
+    alert(err.response?.data?.message || '支付失败')
+  }
+}
+
+//取消订单
+const handleCancel=async()=>{
+  if(!confirm('确定要取消订单吗？')){
+    return
+  }
+  try{
+    const res=await request.put(`/user/order/cancel/${orderId}`)
+    alert(res.data.message)
+    loadOrderDetail()
+    router.push('/orders')
+  }catch(error:any){
+    alert(error.response?.data?.message || '取消失败')
+  }
+}
+
 </script>
 
 <template>
@@ -114,8 +144,8 @@ onMounted(()=>{
 
         <!-- 操作按钮 -->
         <div v-if="order.status===1" class="action-buttons">
-            <button class="pay-btn">去支付</button>
-            <button class="cancel-btn">取消订单</button>
+            <button class="pay-btn" @click="handlePay">去支付</button>
+            <button class="cancel-btn" @click="handleCancel">取消订单</button>
         </div> 
 
       
