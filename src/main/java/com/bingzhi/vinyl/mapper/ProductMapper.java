@@ -47,4 +47,8 @@ public interface ProductMapper {
     @Update("UPDATE product SET stock=stock-#{quantity} Where id = #{id}")
     void decreaseStock(@Param("id") Long id,@Param("quantity") Integer quantity);
 
+    //增加库存
+    @Update("UPDATE product SET stock=stock+#{quantity} where id=#{id}")
+    int increaseStock(@Param("id") Long id,@Param("quantity") Integer quantity);
+
 }

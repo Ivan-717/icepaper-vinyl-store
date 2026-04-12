@@ -186,8 +186,66 @@ public class OrderController {
         return result;
     }
 
+    //模拟支付
+    @PutMapping("/pay/{id}")
+    public Map<String,String> payOrder(@PathVariable Long id,@RequestHeader("Authorization") String token){
+        Long userId=JwtUtil.getUserId(token);
+        Orders order=orderMapper.findById(id);
+        if (order==null || order.getUserId()!=userId){
+            throw new RuntimeException("订单不存在");
+        }
+        if(order.getStatus()!=1){
+            throw  new RuntimeException("订单状态不正确，无法支付");
+        }
 
+        //更新订单状态2（待发货）
+        orderMapper.updateStatus(id,2);
 
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "支付成功");
+        return result;
+    }
+
+    //取消订单
+    @PutMapping("/cancel/{id}")
+    public Map<String,String> cancelOrder(@PathVariable Long id,@RequestHeader("Authorization") String token)
+    {
+        Long userId=JwtUtil.getUserId(token);
+        Orders order=orderMapper.findById(id);
+        if (order==null || order.getUserId()!=userId){
+            throw new RuntimeException("订单不存在");
+        }
+        if(order.getStatus()!=1){
+            throw new RuntimeException("只有待付款订单可取消");
+        }
+
+        //获取订单明细
+        List<OrderDetail> details=orderDetailMapper.findByOrderId(id);
+
+        //恢复库存
+        for (OrderDetail detail:details){
+            //先尝试恢复商品库存
+            int updated=productMapper.increaseStock(detail.getProductId(),detail.getQuantity());
+            if(updated==0){
+                //如果不是商品
+                Combo combo=comboMapper.findById(detail.getProductId());
+                if(combo!=null){
+                    List<ComboItem> comboItems=comboMapper.findItemsByComboId(combo.getId());
+                    for (ComboItem item : comboItems){
+                        productMapper.increaseStock(item.getProductId(),item.getQuantity()*detail.getQuantity());
+                    }
+                }
+            }
+        }
+
+        //更新订单状态为5
+        orderMapper.updateStatus(id,5);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "订单已取消");
+        return result;
+
+    }
 
 
 
