@@ -15,22 +15,24 @@ const loading=ref(true)
 const getStatusText = (status: number) => {
     const map: Record<number, string> = {
       1: '待付款',
-      2: '待发货',
-      3: '待收货',
-      4: '已完成',
-      5: '已取消'
+      2: '已支付',
+      3: '待发货',
+      4: '待收货',
+      5: '已完成',
+      6: '已取消'
     }
     return map[status] || '未知'
 }
 
-// 状态样式
-const getStatusClass = (status: number) => {
-    const map: Record<number, string> = {
-      1: 'status-pending',
-      2: 'status-shipping',
-      3: 'status-delivering',
-      4: 'status-completed',
-      5: 'status-cancelled'
+//状态样式
+const getStatusClass=(status:number)=>{
+    const map:Record<number,string>={
+        1:'status-pending',
+        2: 'status-confirmed',
+        3: 'status-shipping',
+        4: 'status-delivering',
+        5: 'status-completed',
+        6: 'status-cancelled'
     }
     return map[status] || ''
 }
@@ -89,6 +91,20 @@ const handleCancel=async()=>{
   }
 }
 
+const handleConfirm=async()=>{
+  if(!confirm('确定已收到商品吗？')){
+    return
+  }
+  try{
+    await request.put(`/user/order/confirm/${orderId}`)
+    alert('确认收货成功')
+    loadOrderDetail()
+    router.push('/orders')
+  }catch (error) {
+    alert('操作失败')
+  }
+}
+
 </script>
 
 <template>
@@ -143,9 +159,10 @@ const handleCancel=async()=>{
         </div> 
 
         <!-- 操作按钮 -->
-        <div v-if="order.status===1" class="action-buttons">
-            <button class="pay-btn" @click="handlePay">去支付</button>
-            <button class="cancel-btn" @click="handleCancel">取消订单</button>
+        <div  class="action-buttons">
+            <button v-if="order.status===1" class="pay-btn" @click="handlePay">去支付</button>
+            <button v-if="order.status===1" class="cancel-btn" @click="handleCancel">取消订单</button>
+            <button v-if="order.status===4" class="confirm-btn" @click="handleConfirm">确认收货</button>
         </div> 
 
       
@@ -210,26 +227,12 @@ const handleCancel=async()=>{
   font-weight: bold;
 }
 
-.status-pending {
-  background: #fff0f0;
-  color: #ff9b9b;
-}
-.status-shipping {
-  background: #fff3e0;
-  color: #ff9800;
-}
-.status-delivering {
-  background: #e8f5e9;
-  color: #42b983;
-}
-.status-completed {
-  background: #f5f5f5;
-  color: #999;
-}
-.status-cancelled {
-  background: #f5f5f5;
-  color: #999;
-}
+.status-pending { color: #ff9b9b; background: #fff0f0; }
+.status-confirmed { color: #42b983; background: #e8f5e9; }
+.status-shipping { color: #ff9800; background: #fff3e0; }
+.status-delivering { color: #2196f3; background: #e3f2fd; }
+.status-completed { color: #999; background: #f5f5f5; }
+.status-cancelled { color: #999; background: #f5f5f5; }
 
 .info-card {
   background: white;
@@ -352,5 +355,18 @@ const handleCancel=async()=>{
 .cancel-btn:hover {
   background: #ffb3b3;
   color: white;
+}
+
+.confirm-btn {
+  background: #ffb3b3;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.confirm-btn:hover {
+  background: #ff9b9b;
 }
 </style>

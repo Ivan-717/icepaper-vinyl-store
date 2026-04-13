@@ -68,7 +68,19 @@ const goToProduct=(id:number)=>{
                     :key="product.id"
                     class="product-card"
                     @click="goToProduct(product.id)">
-                    <img :src="product.image" :alt="product.name">
+                    <!-- 图片容器 -->
+                    <div class="product-image-wrapper">
+                      <img 
+                          :src="product.image"
+                          :alt="product.name"
+                      >
+                      <!-- 商品状态标签 -->
+                      <div class="product-tags">
+                        <span v-if="product.status!==1" class="tag tag-off">已下架</span>
+                        <span v-else-if="product.stock===0" class="tag tag-out">缺货</span>
+                        <span v-else-if="product.stock<5" class="tag tag-low">库存紧张</span>
+                      </div> 
+                    </div> 
                     <h3>{{ product.name }}</h3>
                     <p class="artist">{{ product.artist }}</p>
                     <p class="price">¥{{ product.price }}</p>
@@ -264,5 +276,53 @@ const goToProduct=(id:number)=>{
   background: #ff9b9b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 179, 179, 0.3);
+}
+
+/* 商品卡片需要相对定位 */
+.product-card {
+  position: relative;
+  cursor: pointer;
+}
+
+/* 图片容器 */
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* 标签容器 - 绝对定位在图片左上角 */
+.product-tags {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+/* 通用标签样式 */
+.tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+}
+
+/* 已下架标签 */
+.tag-off {
+  background-color: #999;
+}
+
+/* 缺货标签 */
+.tag-out {
+  background-color: #f56c6c;
+}
+
+/* 库存紧张标签 */
+.tag-low {
+  background-color: #ff9800;
 }
 </style>

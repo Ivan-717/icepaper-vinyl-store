@@ -31,9 +31,15 @@ request.interceptors.request.use(
     }
 )
 
-//响应拦截器：统一处理401未登录
+//响应拦截器：统一处理401未登录和业务错误
 request.interceptors.response.use(
     response=>{
+        const data=response.data
+        //如果后端返回了success 字段为false,抛出错误
+        if(data && data.success===false){
+            const error=new Error(data.message || '操作失败')
+            return Promise.reject(error)
+        }
         return response
     },error=>{
         if(error.response?.status===401){
@@ -45,6 +51,8 @@ request.interceptors.response.use(
         return Promise.reject(error)
     }
 )
+
+
 
 export default request
 

@@ -38,6 +38,12 @@ onMounted(async()=>{
 
 //加入购物车
 const addToCart=async()=>{
+
+  if(product.value?.status!==1){
+    alert('上平已下架，无法购买')
+    return
+  }
+
   if(!product.value){
     return
   }
@@ -145,7 +151,15 @@ const goBack=()=>{
                         </button>
                       </div>
 
-                      <button class="add-to-cart-btn" @click="addToCart">
+                      <button v-if="product.status!==1" class="disabled-btn">
+                        已下架
+                      </button>
+
+                      <button v-else-if="product.stock===0" class="disabled-btn">
+                        缺货
+                      </button>
+
+                      <button v-else class="add-to-cart-btn" @click="addToCart">
                           加入购物车
                       </button>
                 </div>
@@ -383,5 +397,17 @@ const goBack=()=>{
   .price {
     font-size: 1.5rem;
   }
+}
+
+.disabled-btn {
+  flex: 1;
+  height: 48px;
+  background: #ccc;
+  color: #999;
+  border: none;
+  border-radius: 40px;
+  cursor: not-allowed;
+  font-size: 1rem;
+  font-weight: 500;
 }
 </style>

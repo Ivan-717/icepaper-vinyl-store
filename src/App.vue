@@ -3,7 +3,8 @@
   import { useCartStore } from './stores/cart';
   import { useRoute,useRouter } from 'vue-router';
   import { computed } from 'vue';
-  import { onMounted } from 'vue';
+  import { onMounted,ref } from 'vue';
+  import request from './api/request';
 
 
   const cartStore=useCartStore()
@@ -38,8 +39,20 @@
   }
 
   onMounted(()=>{
+    getShopStatus()
     cartStore.loadCart()
   })
+
+  const shopStatus=ref(1)
+  //获取店铺状态
+  const getShopStatus=async()=>{
+    try{
+      const res=await request.get('/shop/status')
+      shopStatus.value=res.data.status
+    }catch (error) {
+      console.error('获取店铺状态失败:', error)
+    }
+  }
 </script>
 
 <template>
@@ -55,6 +68,12 @@
       
       <div class="header-right">
         <nav>
+
+          <!-- 店铺状态 -->
+           <div class="shop-status" :class="shopStatus===1?'open' : 'closed'">
+            {{ shopStatus === 1 ? '🟢 营业中' : '🔴 打烊中' }}
+           </div>
+
           <RouterLink to="/">首页</RouterLink>
           <RouterLink to="/cart">
             🛒 购物车
@@ -100,95 +119,10 @@ body {
   flex-direction: column;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-left: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-nav a:hover {
-  background-color: rgba(255,255,255,0.2);
-}
-
-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-}
-
-/* 购物车链接特殊处理 */
-.cart-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* 购物车角标 */
-.cart-badge {
-  display: inline-block;
-  min-width: 20px;
-  height: 20px;
-  background-color: #ff4444;
-  color: white;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 20px;
-  text-align: center;
-  padding: 0 4px;
-  margin-left: 4px;
-}
-
-/* 用户区域 */
-.user-section {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: 20px;
-}
-
-.username {
-  color: white;
-  font-size: 14px;
-}
-
-.logout-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.logout-btn:hover {
-  background: rgba(255,255,255,0.4);
-}
-
-.login-link {
-  color: white;
-  text-decoration: none;
-  padding: 4px 12px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 20px;
-  transition: background 0.2s;
-}
-
-.login-link:hover {
-  background: rgba(255,255,255,0.4);
-}
-
-
 header {
   background-color: #e8c2dc;
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.8rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -212,39 +146,142 @@ header {
 }
 
 .welcome-msg {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   letter-spacing: 2px;
   background: linear-gradient(135deg, #fff, #ffe6f0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.address-link {
+/* 导航栏容器 - 使用 flex 布局 */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
   color: white;
   text-decoration: none;
-  margin-right: 1rem;
-  padding: 0.25rem 0.5rem;
-  background: rgba(255,255,255,0.2);
-  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
-.address-link:hover {
-  background: rgba(255,255,255,0.3);
+nav a:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* 店铺状态 */
+.shop-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.shop-status.open {
+  background: rgba(66, 185, 131, 0.25);
+  color: #2e7d32;
+}
+
+.shop-status.closed {
+  background: rgba(255, 68, 68, 0.2);
+  color: #c62828;
+}
+
+/* 购物车链接 */
+.cart-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+/* 购物车角标 */
+.cart-badge {
+  display: inline-block;
+  min-width: 18px;
+  height: 18px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  padding: 0 5px;
+}
+
+/* 用户区域 */
+.user-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.username {
+  color: white;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+.login-link {
+  color: white;
+  text-decoration: none;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.login-link:hover {
+  background: rgba(255,255,255,0.4);
 }
 
 .orders-link, .address-link {
   color: white;
   text-decoration: none;
-  margin-right: 0.5rem;
-  padding: 0.25rem 0.8rem;
+  padding: 4px 10px;
   background: rgba(255,255,255,0.2);
-  border-radius: 4px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: background 0.2s;
 }
 
 .orders-link:hover, .address-link:hover {
   background: rgba(255,255,255,0.3);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 </style>

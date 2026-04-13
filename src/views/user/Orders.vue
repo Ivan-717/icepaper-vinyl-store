@@ -13,20 +13,22 @@ const activeStatus=ref(0)
 const statusTabs=[
     {label:'全部',value:0},
     {label:'待付款',value:1},
-    {label:'待发货',value:2},
-    {label:'待收货',value:3},
-    {label:'已完成',value:4},
-    {label:'已取消',value:5}
+    {label:'已支付',value:2},
+    {label:'待发货',value:3},
+    {label:'待收货',value:4},
+    {label:'已完成',value:5},
+    {label:'已取消',value:6}
 ]
 
 //状态文字
 const getStatusText = (status: number) => {
     const map: Record<number, string> = {
       1: '待付款',
-      2: '待发货',
-      3: '待收货',
-      4: '已完成',
-      5: '已取消'
+      2: '已支付',
+      3: '待发货',
+      4: '待收货',
+      5: '已完成',
+      6: '已取消'
     }
     return map[status] || '未知'
 }
@@ -35,10 +37,11 @@ const getStatusText = (status: number) => {
 const getStatusClass=(status:number)=>{
     const map:Record<number,string>={
         1:'status-pending',
-        2: 'status-shipping',
-        3: 'status-delivering',
-        4: 'status-completed',
-        5: 'status-cancelled'
+        2: 'status-confirmed',
+        3: 'status-shipping',
+        4: 'status-delivering',
+        5: 'status-completed',
+        6: 'status-cancelled'
     }
     return map[status] || ''
 }
@@ -288,26 +291,12 @@ h1 {
   border-radius: 20px;
 }
 
-.status-pending { 
-  color: #ff9b9b;
-  background: #fff0f0;
-}
-.status-shipping { 
-  color: #ff9800;
-  background: #fff3e0;
-}
-.status-delivering { 
-  color: #42b983;
-  background: #e8f5e9;
-}
-.status-completed { 
-  color: #999;
-  background: #f5f5f5;
-}
-.status-cancelled { 
-  color: #999;
-  background: #f5f5f5;
-}
+.status-pending { color: #ff9b9b; background: #fff0f0; }
+.status-confirmed { color: #42b983; background: #e8f5e9; }
+.status-shipping { color: #ff9800; background: #fff3e0; }
+.status-delivering { color: #2196f3; background: #e3f2fd; }
+.status-completed { color: #999; background: #f5f5f5; }
+.status-cancelled { color: #999; background: #f5f5f5; }
 
 .order-items {
   padding: 0.5rem 1rem;

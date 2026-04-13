@@ -27,6 +27,12 @@ const goToAddress=()=>{
 
 //提交订单
 const submitOrder=async()=>{
+    //先检查店铺状态
+    const isOpen=await checkShopStatus()
+    if(!isOpen){
+      return
+    }
+
     if(!selectedAddress.value){
         alert('请选择收货地址')
         return
@@ -50,12 +56,11 @@ const submitOrder=async()=>{
             router.push('/orders')
         }
     }catch (error) {
-      console.error('提交订单失败:', error)
-      alert('提交订单失败')
+      console.error('完整错误对象:', error)
+      const err = error as any
+      alert(err.message || '提交订单失败')
     }
 }
-
-
 
 onMounted(()=>{
     loadAddress()
@@ -87,6 +92,21 @@ const loadAddress=async()=>{
     }catch (error) {
       console.error('加载地址失败:', error)
     }
+}
+
+//检查店铺状态
+const checkShopStatus=async()=>{
+  try{
+    const res=await request.get('/shop/status')
+    if(res.data.status!==1){
+      alert('店铺已打烊，暂无法下单')
+      return false
+    }
+    return true
+  }catch (error) {
+    console.error('获取店铺状态失败:', error)
+    return false
+  }
 }
 
 </script>

@@ -25,6 +25,8 @@ const loadStats=async()=>{
             request.get('/admin/orders/today-stats')
         ])
 
+        console.log('todayStats.data:', todayStats.data)
+
         stats.value.productCount=products.data.length
         stats.value.comboCount=combos.data.length
         stats.value.employCount=employees.data.length
@@ -84,7 +86,7 @@ onMounted(()=>{
             <div class="stat-card">
                 <div class="stat-icon">📋</div>
                 <div class="stat-info">
-                    <div class="stat-value">{{ stats.comboCount }}</div>
+                    <div class="stat-value">{{ stats.todayOrder }}</div>
                     <div class="stat-label">今日订单数</div>
                 </div>
             </div> 

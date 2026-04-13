@@ -11,6 +11,10 @@ interface Order{
     status:number,
     createTime:string
     updateTime:string
+    receiver: string        // 收货人
+    receiverPhone: string   // 收货人电话
+    address: string         // 收货地址
+    remark?: string         // 备注（可选）
 }
 
 //订单明细类型
@@ -204,6 +208,12 @@ onMounted(()=>{
                         <p><strong>总金额:</strong>{{ currentOrder.totalAmount }}</p>
                         <p><strong>状态:</strong>{{ statusMap[currentOrder.status] }}</p>
                         <p><strong>下单时间:</strong>{{ currentOrder.createTime }}</p>
+
+                        <!-- 收货信息 -->
+                        <p><strong>收货人:</strong>{{ currentOrder.receiver }}</p> 
+                        <p><strong>联系电话：</strong>{{ currentOrder.receiverPhone }}</p>
+                        <p><strong>收货地址：</strong>{{ currentOrder.address }}</p>
+                        <p v-if="currentOrder.remark"><strong>备注：</strong>{{ currentOrder.remark }}</p>
                     </div>
                 
                     <h3>商品列表</h3>
