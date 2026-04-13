@@ -35,10 +35,20 @@ public class OrderController {
     @Autowired
     private OrderDetailMapper orderDetailMapper;
 
+    @Autowired
+    private  SystemConfigMapper systemConfigMapper;
+
     //创建订单
     @PostMapping("/create")
     @Transactional //加上事务
     public Map<String, Object> createOrder(@RequestHeader("Authorization") String token, @RequestBody Map<String,Object> request){
+
+
+        //检查店铺是否营业
+        SystemConfig config = systemConfigMapper.getConfig();
+        if(config==null||config.getShopStatus()==0){
+            throw  new RuntimeException("店铺已打烊，无法下单");
+        }
 
         Long userId= JwtUtil.getUserId(token);
         Long addressId=Long.valueOf(request.get("addressId").toString());
@@ -50,11 +60,30 @@ public class OrderController {
             throw new RuntimeException("购物车为空");
         }
 
+        System.out.println("=== 开始创建订单 ===");
+        System.out.println("购物车数量: " + cartList.size());
+        for (Cart cart : cartList) {
+            System.out.println("购物车项: type=" + cart.getType() + ", productId=" + cart.getProductId() + ", comboId=" + cart.getComboId());
+        }
+
+
         //计算金额，检查库存
         BigDecimal totalAmount=BigDecimal.ZERO;
         for (Cart cart : cartList){
             if(cart.getType()==0){
                 Product product=productMapper.findById(cart.getProductId());
+
+
+
+                if(product==null){
+                    throw new RuntimeException("商品不存在");
+                }
+
+                //检查商品是否下架
+                if(product.getStatus()!=1){
+                    throw new RuntimeException("商品 " + product.getName() + " 已下架，无法购买");
+                }
+
                 if(product.getStock()<cart.getQuantity()){
                     throw new RuntimeException("商品"+product.getName()+"库存不足");
                 }
@@ -239,12 +268,30 @@ public class OrderController {
         }
 
         //更新订单状态为5
-        orderMapper.updateStatus(id,5);
+        orderMapper.updateStatus(id,6);
 
         Map<String, String> result = new HashMap<>();
         result.put("message", "订单已取消");
         return result;
 
+    }
+
+    //用户确认收货
+    @PutMapping("/confirm/{id}")
+    public Map<String,String> confirmOrder(@PathVariable Long id,@RequestHeader("Authorization") String token){
+        Long userId=JwtUtil.getUserId(token);
+        Orders order=orderMapper.findById(id);
+        if(order==null || order.getUserId()!=userId){
+            throw new RuntimeException("订单不存在");
+        }
+        if(order.getStatus()!=4){
+            throw  new RuntimeException("只有待收货订单可以确认");
+        }
+        orderMapper.updateStatus(id,5);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "确认收货成功");
+        return result;
     }
 
 

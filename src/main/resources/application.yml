@@ -9,6 +9,12 @@ spring:
     password: Lzb20060908
     driver-class-name: com.mysql.cj.jdbc.Driver  #mysql8.0的官方驱动类
 
+  data:
+    redis:
+      host: 192.168.31.130
+      port: 6379
+      timeout: 5000ms
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml  #告诉mybatis我的sql语句所在的文件
   type-aliases-package: com.bingzhi.vinyl.entity #写sql时，不用写完整的类名

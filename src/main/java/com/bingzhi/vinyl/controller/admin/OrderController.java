@@ -82,4 +82,18 @@ public class OrderController {
         return result;
     }
 
+    //员工发货
+    @PutMapping("/deliver/{id}")
+    public Map<String,String> deliver(@PathVariable Long id){
+        Orders order=orderMapper.findById(id);
+        if(order==null || order.getStatus()!=2){
+            throw  new RuntimeException("只有待发货订单可以发货");
+        }
+        orderMapper.updateStatus(id,3);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "发货成功");
+        return result;
+    }
+
 }
