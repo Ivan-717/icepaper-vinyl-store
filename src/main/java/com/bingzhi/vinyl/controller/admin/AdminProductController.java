@@ -3,6 +3,7 @@ package com.bingzhi.vinyl.controller.admin;
 import com.bingzhi.vinyl.entity.Product;
 import com.bingzhi.vinyl.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -15,6 +16,9 @@ public class AdminProductController {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
+
     @GetMapping
     public List<Product> list(){
         return productMapper.findAll();
@@ -23,6 +27,8 @@ public class AdminProductController {
     @PostMapping
     public Map<String,Object> add(@RequestBody Product product){
         productMapper.insert(product);
+
+        redisTemplate.delete("products:all");
 
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
@@ -36,6 +42,9 @@ public class AdminProductController {
     public Map<String,String> update(@RequestBody Product product){
         productMapper.update(product);
 
+        redisTemplate.delete("products:all");
+        redisTemplate.delete("product:detail:"+product.getId());
+
         Map<String, String> result = new HashMap<>();
         result.put("message", "更新成功");
         return result;
@@ -44,6 +53,9 @@ public class AdminProductController {
     @DeleteMapping("/{id}")
     public Map<String,String> delete(@PathVariable Long id){
         productMapper.deleteById(id);
+
+        redisTemplate.delete("products:all");
+        redisTemplate.delete("product:detail:"+id);
 
         Map<String, String> result = new HashMap<>();
         result.put("message", "删除成功");
@@ -54,6 +66,9 @@ public class AdminProductController {
     public Map<String,String> updateStatus(@PathVariable Long id,@RequestBody Map<String,Integer> request){
         Integer status=request.get("status");
         productMapper.updateStatus(id,status);
+
+        redisTemplate.delete("products:all");
+        redisTemplate.delete("product:detail:"+id);
 
         Map<String, String> result = new HashMap<>();
         result.put("message", "状态更新成功");
