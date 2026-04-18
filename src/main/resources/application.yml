@@ -5,13 +5,13 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/bingzhi_vinyl?serverTimezone=Asia/Shanghai&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: root
+    username:  root
     password: Lzb20060908
     driver-class-name: com.mysql.cj.jdbc.Driver  #mysql8.0的官方驱动类
 
   data:
     redis:
-      host: 192.168.31.130
+      host:  192.168.31.130
       port: 6379
       timeout: 5000ms
 

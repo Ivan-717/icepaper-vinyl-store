@@ -104,7 +104,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.bingzhi.vinyl.IcePaperVinylStoreApplication</mainClass>
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>
