@@ -27,3 +27,9 @@ server:
 
 jwt:
   secret: bingzhi_vinyl_secret_key_2026_very_long_32bytes
+
+
+#智谱AI配置：
+zhipu:
+  api:
+    key: 4e7cb068544d4ceb9311b0d8104403b0.iyp5PZsgZi6QY2L5
