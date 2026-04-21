@@ -141,6 +141,10 @@ const goToSearch=()=>{
                 <p class="price">¥{{ product.price }}</p>
             </div>
         </div>
+        <!-- ai客服浮动按钮 -->
+        <RouterLink to="/ai-chat" class="ai-chat-btn">
+          💬
+        </RouterLink> 
 
     </div>
 </template>
@@ -406,5 +410,32 @@ const goToSearch=()=>{
 /* 库存紧张标签 */
 .tag-low {
   background-color: #ff9800;
+}
+
+/* AI客服浮动按钮 - 固定在右下角 */
+.ai-chat-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background: #ffb3b3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(255, 179, 179, 0.4);
+    transition: all 0.3s;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.ai-chat-btn:hover {
+    background: #ff9b9b;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 179, 179, 0.5);
 }
 </style>

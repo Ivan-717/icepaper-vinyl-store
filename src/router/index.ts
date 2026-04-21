@@ -65,6 +65,10 @@ const router = createRouter({
       name:'order-detail',
       component:()=>import('../views/user/OrderDetail.vue')
     },{
+      path:'/ai-chat',
+      name:'ai-chat',
+      component:()=>import('../views/user/AiChat.vue')
+    },{
       path:'/admin',
       component:AdminLayout,
       children:[

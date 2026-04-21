@@ -8,7 +8,7 @@ const baseURL = import.meta.env.DEV
 //创建axios实例
 const request=axios.create({
     baseURL:baseURL,
-    timeout:5000
+    timeout:50000
 })
 
 //请求拦截器：自动添加Token
